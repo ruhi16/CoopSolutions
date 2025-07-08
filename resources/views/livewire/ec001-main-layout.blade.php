@@ -238,6 +238,11 @@
             </div>
         </div>
 
+        <!-- Members Header -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">        
+            @livewire('ec05-member-type-comp')
+        </div>
+        
         <!-- Organisations Header -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6">        
             @livewire('ec01-organisation')
@@ -253,6 +258,8 @@
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6">        
             @livewire('ec05-member-comp')
         </div>
+
+
 
 
 
