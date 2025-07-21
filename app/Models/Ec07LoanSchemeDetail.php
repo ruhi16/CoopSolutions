@@ -10,4 +10,10 @@ class Ec07LoanSchemeDetail extends Model
     use HasFactory;
     protected $table = 'ec07_loan_scheme_details';
     protected $guarded = ['id'];
+
+
+    public function loanScheme(){
+        return $this->belongsTo(Ec06LoanScheme::class,'loan_scheme_id', 'id');
+        
+    }
 }

@@ -12,13 +12,25 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        .submenu-enter {
+        .submenu {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
-        .submenu-enter-active {
-            max-height: 1000px;
+        .submenu-open {
+            transition: max-height 0.5s ease-in;
+        }
+        .fa-chevron-down {
+            transition: transform 0.3s ease;
+        }
+        /* Ensure menu items have proper hover states */
+        .menu-toggle:hover, .submenu-toggle:hover {
+            background-color: rgba(243, 244, 246, 0.8);
+        }
+        /* Active menu styling */
+        .menu-toggle.active {
+            background-color: rgba(243, 244, 246, 1);
+            font-weight: 500;
         }
     </style>
 </head>
@@ -91,24 +103,32 @@
                 <button class="menu-toggle flex items-center justify-between w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200">
                     <div class="flex items-center space-x-3">
                         <i class="fas fa-users"></i>
-                        <span>User Management</span>
+                        <span>Organisation</span>
                     </div>
                     <i class="fas fa-chevron-down transform transition-transform duration-200"></i>
                 </button>
                 
                 <!-- Level 2 Submenu -->
-                <div class="submenu mt-2 ml-4 space-y-1 max-h-0 overflow-hidden transition-all duration-300">
-                    <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
-                        <i class="fas fa-user-plus text-sm"></i>
-                        <span>Add User</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
+                <div class="submenu mt-2 ml-4 space-y-1">
+                    @foreach($organisationMenus as $organisationMenu)
+                    <button 
+                        wire:click="setActiveMenu('{{ $organisationMenu['name'] }}')"
+                        class="menu-item flex items-center w-full space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200 {{ $organisationMenu['name'] == $activeMenu ? 'bg-gray-200' : ''}}">
+                        <i class="{{ $organisationMenu['icon']}} text-sm"></i>
+                        <span>{{ $organisationMenu['label'] }}</span>
+                    </button>
+                    @endforeach
+                    {{-- <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
                         <i class="fas fa-list text-sm"></i>
-                        <span>User List</span>
+                        <span>Financial Year</span>
                     </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
+                        <i class="fas fa-shield text-sm"></i>
+                        <span>Officials</span>
+                    </a> --}}
                     
                     <!-- Level 3 Menu - Roles -->
-                    <div class="ml-4">
+                    {{-- <div class="ml-4">
                         <button class="submenu-toggle flex items-center justify-between w-full px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
                             <div class="flex items-center space-x-3">
                                 <i class="fas fa-shield-alt text-sm"></i>
@@ -118,7 +138,7 @@
                         </button>
                         
                         <!-- Level 3 Submenu -->
-                        <div class="submenu mt-2 ml-4 space-y-1 max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="submenu mt-2 ml-4 space-y-1">
                             <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-all duration-200">
                                 <i class="fas fa-plus-circle text-xs"></i>
                                 <span>Create Role</span>
@@ -132,7 +152,8 @@
                                 <span>Permissions</span>
                             </a>
                         </div>
-                    </div>
+                    </div> --}}
+
                 </div>
             </div>
 
@@ -147,7 +168,7 @@
                 </button>
                 
                 <!-- Level 2 Submenu -->
-                <div class="submenu mt-2 ml-4 space-y-1 max-h-0 overflow-hidden transition-all duration-300">
+                <div class="submenu mt-2 ml-4 space-y-1">
                     <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
                         <i class="fas fa-plus text-sm"></i>
                         <span>Create Post</span>
@@ -168,7 +189,7 @@
                         </button>
                         
                         <!-- Level 3 Submenu -->
-                        <div class="submenu mt-2 ml-4 space-y-1 max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="submenu mt-2 ml-4 space-y-1">
                             <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-all duration-200">
                                 <i class="fas fa-plus-circle text-xs"></i>
                                 <span>Add Category</span>
@@ -196,6 +217,7 @@
                     <span>Settings</span>
                 </a>
             </div>
+
         </nav>
     </aside>
 
@@ -237,16 +259,29 @@
                 </button>
             </div>
         </div>
+        
 
+        @if($activeMenu == 'dashboard')
+
+        @elseif($activeMenu == 'organisation')
+            {{-- @livewire('ec01-organisation') --}}
+            @livewire($organisationMenus['organisation']['component'])
+        @elseif($activeMenu == 'officials')
+            {{-- @livewire('ec02-financial-year') --}}
+            @livewire($organisationMenus['officials']['component'])
+
+        @endif
+        {{-- <!-- Organisations Header -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">        
+            @livewire('ec01-organisation')
+        </div>
+
+        
         <!-- Members Header -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6">        
             @livewire('ec05-member-type-comp')
         </div>
         
-        <!-- Organisations Header -->
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">        
-            @livewire('ec01-organisation')
-        </div>
 
         
         <!-- Financial year Header -->
@@ -259,7 +294,7 @@
             @livewire('ec05-member-comp')
         </div>
 
-
+ --}}
 
 
 
@@ -419,110 +454,221 @@
     <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
 
     <script>
-        // Toggle sidebar
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        const overlay = document.getElementById('overlay');
-
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full');
-            if (window.innerWidth < 1024) {
-                overlay.classList.toggle('hidden');
-            }
-        });
-
-        // Close sidebar when clicking overlay
-        overlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        });
-
-        // Responsive sidebar
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 1024) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.add('hidden');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-            }
-        });
-
-        // Initialize responsive behavior
-        if (window.innerWidth < 1024) {
-            sidebar.classList.add('-translate-x-full');
-            mainContent.classList.remove('ml-64');
+        // Function to initialize menu state
+        function initializeMenuState() {
+            // Get the active menu from PHP if available
+            const activeMenu = '{{ $activeMenu }}';
+            
+            // Find and open the menu containing the active item
+            document.querySelectorAll('.menu-toggle').forEach(button => {
+                const submenu = button.nextElementSibling;
+                if (submenu) {
+                    // Check if this submenu contains the active menu item
+                    const hasActiveItem = Array.from(submenu.querySelectorAll('button'))
+                        .some(item => item.classList.contains('bg-gray-200'));
+                    
+                    if (hasActiveItem) {
+                        // Open this menu
+                        const chevron = button.querySelector('.fa-chevron-down');
+                        submenu.classList.add('submenu-open');
+                        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                        if (chevron) chevron.style.transform = 'rotate(180deg)';
+                        button.classList.add('active');
+                    }
+                }
+            });
         }
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize menu state
+            initializeMenuState();
+            // Toggle sidebar
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const overlay = document.getElementById('overlay');
 
-        // Menu toggle functionality
-        document.querySelectorAll('.menu-toggle').forEach(button => {
-            button.addEventListener('click', () => {
-                const submenu = button.nextElementSibling;
-                const chevron = button.querySelector('.fa-chevron-down');
-                
-                if (submenu.style.maxHeight && submenu.style.maxHeight !== '0px') {
-                    submenu.style.maxHeight = '0';
-                    chevron.style.transform = 'rotate(0deg)';
-                } else {
-                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
-                    chevron.style.transform = 'rotate(180deg)';
+            if (sidebarToggle && sidebar && mainContent && overlay) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('-translate-x-full');
+                    if (window.innerWidth < 1024) {
+                        overlay.classList.toggle('hidden');
+                    }
+                });
+
+                // Close sidebar when clicking overlay
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                });
+
+                // Responsive sidebar
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth >= 1024) {
+                        sidebar.classList.remove('-translate-x-full');
+                        overlay.classList.add('hidden');
+                    } else {
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                });
+
+                // Initialize responsive behavior
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.add('-translate-x-full');
+                    mainContent.classList.remove('ml-64');
                 }
+            }
+
+            // Menu toggle functionality
+            document.querySelectorAll('.menu-toggle').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const submenu = button.nextElementSibling;
+                    const chevron = button.querySelector('.fa-chevron-down');
+                    
+                    // Close all other menus first
+                    document.querySelectorAll('.menu-toggle').forEach(otherButton => {
+                        if (otherButton !== button) {
+                            const otherSubmenu = otherButton.nextElementSibling;
+                            const otherChevron = otherButton.querySelector('.fa-chevron-down');
+                            if (otherSubmenu && otherSubmenu.classList.contains('submenu-open')) {
+                                otherSubmenu.classList.remove('submenu-open');
+                                otherSubmenu.style.maxHeight = '0';
+                                if (otherChevron) otherChevron.style.transform = 'rotate(0deg)';
+                            }
+                        }
+                    });
+                    
+                    // Toggle the clicked menu
+                    if (submenu) {
+                        if (submenu.classList.contains('submenu-open')) {
+                            submenu.classList.remove('submenu-open');
+                            submenu.style.maxHeight = '0';
+                            if (chevron) chevron.style.transform = 'rotate(0deg)';
+                        } else {
+                            submenu.classList.add('submenu-open');
+                            submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                            if (chevron) chevron.style.transform = 'rotate(180deg)';
+                        }
+                    }
+                });
             });
-        });
 
-        // Submenu toggle functionality
-        document.querySelectorAll('.submenu-toggle').forEach(button => {
-            button.addEventListener('click', () => {
-                const submenu = button.nextElementSibling;
-                const chevron = button.querySelector('.fa-chevron-down');
-                
-                if (submenu.style.maxHeight && submenu.style.maxHeight !== '0px') {
-                    submenu.style.maxHeight = '0';
-                    chevron.style.transform = 'rotate(0deg)';
-                } else {
-                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
-                    chevron.style.transform = 'rotate(180deg)';
-                }
+            // Submenu toggle functionality (level 3 menus)
+            document.querySelectorAll('.submenu-toggle').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const submenu = button.nextElementSibling;
+                    const chevron = button.querySelector('.fa-chevron-down');
+                    
+                    // Close all other submenus at the same level
+                    const parentSubmenu = button.closest('.submenu');
+                    if (parentSubmenu) {
+                        parentSubmenu.querySelectorAll('.submenu-toggle').forEach(otherButton => {
+                            if (otherButton !== button) {
+                                const otherSubmenu = otherButton.nextElementSibling;
+                                const otherChevron = otherButton.querySelector('.fa-chevron-down');
+                                if (otherSubmenu && otherSubmenu.classList.contains('submenu-open')) {
+                                    otherSubmenu.classList.remove('submenu-open');
+                                    otherSubmenu.style.maxHeight = '0';
+                                    if (otherChevron) otherChevron.style.transform = 'rotate(0deg)';
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Toggle the clicked submenu
+                    if (submenu) {
+                        if (submenu.classList.contains('submenu-open')) {
+                            submenu.classList.remove('submenu-open');
+                            submenu.style.maxHeight = '0';
+                            if (chevron) chevron.style.transform = 'rotate(0deg)';
+                        } else {
+                            submenu.classList.add('submenu-open');
+                            submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                            if (chevron) chevron.style.transform = 'rotate(180deg)';
+                        }
+                    }
+                });
             });
-        });
 
-        // User menu toggle
-        const userMenuToggle = document.getElementById('userMenuToggle');
-        const userDropdown = document.getElementById('userDropdown');
+            // User menu toggle
+            const userMenuToggle = document.getElementById('userMenuToggle');
+            const userDropdown = document.getElementById('userDropdown');
 
-        userMenuToggle.addEventListener('click', () => {
-            userDropdown.classList.toggle('hidden');
-        });
+            if (userMenuToggle && userDropdown) {
+                userMenuToggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    userDropdown.classList.toggle('hidden');
+                });
 
-        // Close user dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!userMenuToggle.contains(e.target) && !userDropdown.contains(e.target)) {
-                userDropdown.classList.add('hidden');
+                // Close user dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!userMenuToggle.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Login form submission
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Here you would typically send the form data to your Laravel backend
+                    console.log('Login form submitted');
+                    hideLoginModal();
+                });
             }
         });
 
-        // Login modal functions
+        // Login modal functions (global scope for onclick handlers)
         function showLoginModal() {
-            document.getElementById('loginModal').classList.remove('hidden');
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                loginModal.classList.remove('hidden');
+            }
         }
 
         function hideLoginModal() {
-            document.getElementById('loginModal').classList.add('hidden');
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                loginModal.classList.add('hidden');
+            }
         }
 
         // Close modal when clicking outside
-        document.getElementById('loginModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('loginModal')) {
+        document.addEventListener('click', (e) => {
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal && e.target === loginModal) {
                 hideLoginModal();
             }
         });
-
-        // Login form submission
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Here you would typically send the form data to your Laravel backend
-            console.log('Login form submitted');
-            hideLoginModal();
+        
+        // Listen for Livewire events to update menu state
+        document.addEventListener('livewire:load', function() {
+            Livewire.hook('message.processed', (message, component) => {
+                // Re-initialize menu state after Livewire updates
+                initializeMenuState();
+            });
+            
+            // Listen for custom menu state update event
+            window.addEventListener('menu-state-updated', event => {
+                // Close all menus first
+                document.querySelectorAll('.menu-toggle').forEach(button => {
+                    const submenu = button.nextElementSibling;
+                    const chevron = button.querySelector('.fa-chevron-down');
+                    if (submenu && submenu.classList.contains('submenu-open')) {
+                        submenu.classList.remove('submenu-open');
+                        submenu.style.maxHeight = '0';
+                        if (chevron) chevron.style.transform = 'rotate(0deg)';
+                    }
+                });
+                
+                // Then initialize the menu state again
+                setTimeout(initializeMenuState, 100);
+            });
         });
     </script>
 </body>

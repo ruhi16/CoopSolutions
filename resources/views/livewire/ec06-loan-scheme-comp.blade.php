@@ -1,6 +1,5 @@
 <div>
-    <!-- The Master doesn't talk, he acts. -->
-    
+
     <div class="rounded-lg shadow-sm overflow-hidden">
         <div id="alert-container" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
             @if (session()->has('success'))
@@ -27,14 +26,14 @@
 
         <div class="flex justify-between items-center">
             <div class="pb-2">
-                <h1 class="text-2xl font-bold text-gray-900"><span class="text-blue-700">Member Category</span> Information</h1>
-                <p class="text-gray-600 mt-1">Describe the member category of this organisation.</p>
+                <h1 class="text-2xl font-bold text-gray-900"><span class="text-blue-700">Loan Scheme</span> Information</h1>
+                <p class="text-gray-600 mt-1">Describe the <span class="text-blue-700">loan scheme</span> of this organisation.</p>
             </div>
             <button 
                 wire:click="openModal"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
                 <i class="fas fa-plus"></i>
-                <span>Add New Member</span>
+                <span>Add New LoanScheme</span>
             </button>
         </div>
 
@@ -59,7 +58,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach($memberTypes as $memberType)
+            {{-- @foreach($memberTypes as $memberType)
                 <tr class="bg-white border-b hover:bg-gray-100">
                     <td class="px-4 py-1 text-left text-sm font-medium text-gray-900">
                         <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-3">
@@ -84,27 +83,29 @@
                         </button>
                     </td>
                 </tr>
-            @endforeach
+            @endforeach --}}
+            
             </tbody>
         </table>
     </div>
 
 
 
-    <!-- Member Type Modal -->
-    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showMemberTypeModal ? 'block' : 'hidden' }}">
+    <!-- Loan Scheme Modal -->
+    <div id="loanSchemeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showMemberTypeModal ? 'block' : 'hidden' }}">
         <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-2xl mx-4">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">New Member Details Entry</h2>
+                <h2 class="text-2xl font-bold text-gray-900">New <span class="text-blue-700">Loan Scheme</span> Details Entry</h2>
                 <button
                     wire:click="closeModal" 
-                    onclick="hideLoginModal()" class="text-gray-400 hover:text-gray-600">
+                    {{-- onclick="hideLoginModal()"  --}}
+                    class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             
-            <form id="loginForm" 
-                wire:submit.prevent="saveMemberType" class="space-y-4">
+            <form id="loanSchemeForm" 
+                wire:submit.prevent="saveLoanScheme" class="space-y-4">
                 {{-- <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                     <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -157,10 +158,12 @@
                 </div> --}}
                 
                 <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                    Save Member
+                    Save Loan Scheme
                 </button>
             </form>
         </div>
     </div>
+    {{-- End of Loan Scheme Modal --}}
     
 </div>
+

@@ -17,6 +17,7 @@ class Ec01Organisation extends Model
         // 'id' is the primary key in the ec01_organisations table
 
     }
+    
 
     
 }
