@@ -92,7 +92,7 @@
 
 
     <!-- Loan Scheme Modal -->
-    <div id="loanSchemeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showMemberTypeModal ? 'block' : 'hidden' }}">
+    <div id="loanSchemeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showLoanSchemeModal ? 'block' : 'hidden' }}">
         <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-2xl mx-4">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-900">New <span class="text-blue-700">Loan Scheme</span> Details Entry</h2>

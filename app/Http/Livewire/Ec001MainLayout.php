@@ -29,7 +29,7 @@ class Ec001MainLayout extends Component{
         'loanscheme' => [
             'label' => 'Loan Scheme',
             'icon' => 'fas fa-cog',
-            'name' => 'officials',
+            'name' => 'loanscheme',
             'component' =>'ec06-loan-scheme-comp'
         ],
     ];

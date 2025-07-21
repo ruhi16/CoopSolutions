@@ -23,8 +23,8 @@ class CreateEc06LoanSchemesTable extends Migration
             $table->enum('status', ['running', 'completed', 'upcoming', 'suspended', 'cancelled'])->default('suspended')->nullable();
             
             
-            $table->boolean('is_active');            
-            $table->string('remarks');
+            $table->boolean('is_active')->nullable()->default(true);            
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

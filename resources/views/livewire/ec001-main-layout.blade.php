@@ -269,6 +269,8 @@
         @elseif($activeMenu == 'officials')
             {{-- @livewire('ec02-financial-year') --}}
             @livewire($organisationMenus['officials']['component'])
+        @elseif($activeMenu == 'loanscheme')
+            @livewire($organisationMenus['loanscheme']['component'])
 
         @endif
         {{-- <!-- Organisations Header -->
