@@ -17,6 +17,11 @@ class CreateEc07LoanSchemeDetailsTable extends Migration
             $table->id();
             $table->integer('loan_scheme_id');
 
+            $table->integer('loan_scheme_feature_id')->nullable();
+            $table->integer('loan_scheme_feature_standard_id')->nullable();
+            $table->string('loan_scheme_feature_value')->nullable();
+
+
             $table->double('min_amount',10,2)->nullable();
             $table->double('max_amount',10,2)->nullable();
 

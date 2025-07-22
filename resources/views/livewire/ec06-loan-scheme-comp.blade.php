@@ -58,7 +58,7 @@
                 </tr>
             </thead>
             <tbody>
-            {{-- @foreach($memberTypes as $memberType)
+            @foreach($loanSchemes as $loanScheme)
                 <tr class="bg-white border-b hover:bg-gray-100">
                     <td class="px-4 py-1 text-left text-sm font-medium text-gray-900">
                         <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-3">
@@ -66,24 +66,24 @@
                         </div>
                     </td>
                     <td class="px-4 py-1 text-sm font-bold text-gray-900">
-                        {{ $memberType->name }}
+                        {{ $loanScheme->name }}
                     </td>
                     <td class="px-4 py-1 text-sm font-bold text-gray-900">
-                        {{ $memberType->account_no }}
+                        {{ $loanScheme->description }}
                     </td>
                     <td class="px-4 py-1 text-sm font-bold text-gray-900">
-                        {{ $memberType->address }}
+                        {{-- {{ $memberType->address }} --}}
                     </td>
                     <td class="px-4 py-1 text-sm font-bold text-gray-900">
                         <button 
-                            wire:click="openModal({{ $memberType->id }})"
+                            wire:click="openModal({{ $loanScheme->id }})"
                             class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
                             <i class="fas fa-edit"></i>
                             <span>Edit</span>
                         </button>
                     </td>
                 </tr>
-            @endforeach --}}
+            @endforeach
             
             </tbody>
         </table>
@@ -104,7 +104,7 @@
                 </button>
             </div>
             
-            <form id="loanSchemeForm" 
+            <form id="loanSchemeScheme" 
                 wire:submit.prevent="saveLoanScheme" class="space-y-4">
                 {{-- <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>

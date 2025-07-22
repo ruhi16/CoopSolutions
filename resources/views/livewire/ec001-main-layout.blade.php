@@ -266,12 +266,17 @@
         @elseif($activeMenu == 'organisation')
             {{-- @livewire('ec01-organisation') --}}
             @livewire($organisationMenus['organisation']['component'])
+        @elseif($activeMenu == 'finyear')
+            @livewire($organisationMenus['finyear']['component']))
         @elseif($activeMenu == 'officials')
             {{-- @livewire('ec02-financial-year') --}}
             @livewire($organisationMenus['officials']['component'])
         @elseif($activeMenu == 'loanscheme')
             @livewire($organisationMenus['loanscheme']['component'])
+        @elseif($activeMenu == 'loanschemefeature')
 
+        @elseif($activeMenu == 'loanschemedetail')
+        
         @endif
         {{-- <!-- Organisations Header -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6">        
