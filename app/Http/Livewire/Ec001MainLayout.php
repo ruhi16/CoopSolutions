@@ -43,7 +43,7 @@ class Ec001MainLayout extends Component{
             'label' => 'Loan Sc Feature',
             'icon' => 'fas fa-cog',
             'name' => 'loanschemefeature',
-            'component' =>'ec06-loan-scheme-comp'
+            'component' =>'ec07-loan-scheme-feature-comp'
         ],
         'loanschemedetail' => [
             'label' => 'Loan Sc Details',
@@ -56,8 +56,9 @@ class Ec001MainLayout extends Component{
 
     public function setActiveMenu($menu)
     {
+        // dd($menu);
         $this->activeMenu = $menu;
-        $this->dispatchBrowserEvent('menu-state-updated', ['activeMenu' => $menu]);
+        // $this->dispatchBrowserEvent('menu-state-updated', ['activeMenu' => $menu]);
     }
 
 

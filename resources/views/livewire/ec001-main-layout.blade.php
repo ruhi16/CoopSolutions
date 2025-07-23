@@ -270,12 +270,17 @@
             @livewire($organisationMenus['finyear']['component']))
         @elseif($activeMenu == 'officials')
             {{-- @livewire('ec02-financial-year') --}}
-            @livewire($organisationMenus['officials']['component'])
+            {{-- @livewire($organisationMenus['officials']['component']) --}}
         @elseif($activeMenu == 'loanscheme')
             @livewire($organisationMenus['loanscheme']['component'])
         @elseif($activeMenu == 'loanschemefeature')
 
+            {{ $activeMenu }}: {{ $organisationMenus['loanschemefeature']['component'] }}
+            {{-- @livewire($organisationMenus['loanschemefeature']['component']) --}}
+            @livewire('ec07-loan-scheme-feature-comp')
+        
         @elseif($activeMenu == 'loanschemedetail')
+        
         
         @endif
         {{-- <!-- Organisations Header -->
