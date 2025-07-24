@@ -53,13 +53,34 @@
                         Address <i class="fas fa-sort text-gray-400 ml-1"></i>
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="id">
+                        Address <i class="fas fa-sort text-gray-400 ml-1"></i>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="id">
+                        Address <i class="fas fa-sort text-gray-400 ml-1"></i>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="id">
                         Actions <i class="fas fa-sort text-gray-400 ml-1"></i>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($loanSchemeFeatures as $loanSchemeFeature)
-                    <td>{{ $loanSchemeFeature->id }}</td>
+                <tr bg-white border-b hover:bg-gray-100>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->id }}</td>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->name }}</td>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->loan_scheme_feature_name }}</td>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->loan_scheme_feature_type }}</td>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->is_required }}</td>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->is_active }}</td>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">
+                        <button wire:click="edit({{ $loanSchemeFeature->id }})" class="text-blue-600 hover:text-blue-900 mr-2">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button wire:click="delete({{ $loanSchemeFeature->id }})" class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
                 @endforeach
             </tbody>
         </table>

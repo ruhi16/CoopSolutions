@@ -11,7 +11,7 @@ class Ec07LoanSchemeFeatureComp extends Component{
 
 
     public function mount(){
-        $loanSchemeFeatures = \App\Models\EC07LoanSchemeFeature::all();
+        $this->loanSchemeFeatures = \App\Models\EC07LoanSchemeFeature::all();
         // dd($loanSchemeFeatures);
     }
 
