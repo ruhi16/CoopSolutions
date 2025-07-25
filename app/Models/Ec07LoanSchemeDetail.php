@@ -16,4 +16,9 @@ class Ec07LoanSchemeDetail extends Model
         return $this->belongsTo(Ec06LoanScheme::class,'loan_scheme_id', 'id');
         
     }
+
+    public function loanSchemeFeature(){
+        return $this->belongsTo(Ec07LoanSchemeFeature::class, 'loan_scheme_feature_id', 'id');
+
+    }
 }

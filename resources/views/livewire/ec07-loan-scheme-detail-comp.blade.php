@@ -70,9 +70,9 @@
                 @foreach($loanSchemeDetails as $loanSchemeDetail)
                 <tr class="bg-white border-b hover:bg-gray-50">
                     <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loop->iteration }}</td>
-                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->id }}</td>
+                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loanScheme->name }}</td>
                     
-                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loan_scheme_id }}</td>
+                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loanSchemeFeature->name }}</td>
                     <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loan_scheme_feature_id }}</td>
                     <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loan_scheme_feature_value }}</td>
                     {{-- <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->address }}</td>  --}}
