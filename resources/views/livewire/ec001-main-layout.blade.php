@@ -276,11 +276,11 @@
         @elseif($activeMenu == 'loanschemefeature')
 
             {{ $activeMenu }}: {{ $organisationMenus['loanschemefeature']['component'] }}
-            {{-- @livewire($organisationMenus['loanschemefeature']['component']) --}}
-            @livewire('ec07-loan-scheme-feature-comp')
+            @livewire($organisationMenus['loanschemefeature']['component'])
+            {{-- @livewire('ec07-loan-scheme-feature-comp') --}}
         
         @elseif($activeMenu == 'loanschemedetail')
-        
+            @livewire('ec07-loan-scheme-detail-comp')
         
         @endif
         {{-- <!-- Organisations Header -->
