@@ -73,7 +73,11 @@
                     <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loanScheme->name }}</td>
                     
                     <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loanSchemeFeature->name }}</td>
-                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loan_scheme_feature_id }}</td>
+                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ $loanSchemeDetail->loanSchemeFeature->loan_scheme_feature_name }}</br>
+                        <span class="text-xs font-normal text-gray-500">({{ $loanSchemeDetail->loanSchemeFeature->loan_scheme_feature_type }})</span>
+
+                    </td>
                     <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->loan_scheme_feature_value }}</td>
                     {{-- <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loanSchemeDetail->address }}</td>  --}}
                     <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

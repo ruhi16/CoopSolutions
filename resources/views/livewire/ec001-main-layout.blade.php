@@ -281,7 +281,12 @@
         
         @elseif($activeMenu == 'loanschemedetail')
             @livewire('ec07-loan-scheme-detail-comp')
+
+        @elseif($activeMenu == 'loanrequest')
+            @livewire('ec08-loan-request-comp')
         
+        @elseif($activeMenu == 'loanassign')
+            @livewire('ec08-loan-assign-comp')
         @endif
         {{-- <!-- Organisations Header -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6">        

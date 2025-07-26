@@ -51,6 +51,18 @@ class Ec001MainLayout extends Component{
             'name' => 'loanschemedetail',
             'component' =>'ec06-loan-scheme-comp'
         ],
+        'loanrequest' => [
+            'label' => 'Loan Request',
+            'icon' => 'fas fa-cog',
+            'name' => 'loanrequest',
+            'component' =>'ec08-loan-request-comp'
+        ],
+        'loanassign' => [
+            'label' => 'Loan Assign',
+            'icon' => 'fas fa-cog',
+            'name' => 'loanassign',
+            'component' =>'ec08-loan-assign-comp'
+        ],
 
     ];
 
