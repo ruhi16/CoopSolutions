@@ -19,7 +19,9 @@ class CreateEc08LoanRequestsTable extends Migration
             $table->integer('member_id')->nullable();
             $table->integer('req_loan_scheme_id')->nullable();
             $table->double('req_loan_amount', 10, 2)->nullable();
+            $table->integer('time_period_months')->nullable();
             $table->date('req_date')->nullable();
+
 
             $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled', 'closed', 'expired', 'overdue', 'completed'])->default('pending')->nullable();
             $table->date('status_assigning_date')->nullable();                      

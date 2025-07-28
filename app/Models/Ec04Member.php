@@ -11,5 +11,11 @@ class Ec04Member extends Model
     protected $table = 'ec04_members';
     protected $guarded = ['id'];
 
+
+    // public function loanRequests(){
+    //     return $this->hasMany(Ec08LoanRequest::class, 'member_id', 'id');
+    //     // 'member_id' is the foreign key 
+    //     // 'id' is the local key
+    // }
     
 }
