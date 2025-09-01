@@ -15,7 +15,7 @@ class CreateEc04MembersTable extends Migration
     {
         Schema::create('ec04_members', function (Blueprint $table) {
             $table->id();
-            $table->morphs('organisation_id')->nullable();
+            $table->integer('organisation_id')->nullable();
             $table->integer('member_type_id')->nullable();
 
             $table->string('name');

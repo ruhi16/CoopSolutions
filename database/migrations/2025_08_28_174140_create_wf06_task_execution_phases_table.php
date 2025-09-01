@@ -25,6 +25,16 @@ class CreateWf06TaskExecutionPhasesTable extends Migration
             $table->integer('task_event_step_id')->nullable();
             
             
+            $table->boolean('is_finalized')->nullable()->default(true);
+            $table->integer('finalized_by')->nullable();
+            $table->date('finalized_at')->nullable();
+            
+            $table->boolean('is_deleted')->nullable()->default(false); 
+            $table->integer('deleted_by')->nullable();
+            $table->date('deleted_at')->nullable();            
+            
+            $table->integer('organisation_id')->nullable();
+
 
             $table->boolean('is_active')->default(true);
             $table->string('remarks');
