@@ -15,6 +15,17 @@ class CreateTb02RoleOperationsTable extends Migration
     {
         Schema::create('tb02_role_operations', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('description')->nullable();
+            
+            $table->string('table_name')->nullable();
+            $table->integer('operation_value')->nullable();
+            $table->integer('role_id')->nullable();
+            
+
+
+            $table->boolean('is_active')->default(true);
+            $table->string('remarks');
             $table->timestamps();
         });
     }

@@ -15,6 +15,15 @@ class CreateWf05TaskExecutionsTable extends Migration
     {
         Schema::create('wf05_task_executions', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->string('description')->nullable();
+            
+            $table->integer('task_category_id')->nullable();
+            $table->integer('task_event_id')->nullable();
+
+            
+            $table->boolean('is_active')->default(true);
+            $table->string('remarks');
             $table->timestamps();
         });
     }

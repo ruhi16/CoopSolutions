@@ -15,6 +15,13 @@ class CreateWf01TaskCagegoriesTable extends Migration
     {
         Schema::create('wf01_task_cagegories', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('description')->nullable();
+
+
+
+            $table->boolean('is_active')->default(true);
+            $table->string('remarks');
             $table->timestamps();
         });
     }

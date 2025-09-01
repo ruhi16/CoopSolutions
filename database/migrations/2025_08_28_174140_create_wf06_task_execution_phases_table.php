@@ -15,6 +15,20 @@ class CreateWf06TaskExecutionPhasesTable extends Migration
     {
         Schema::create('wf06_task_execution_phases', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('description')->nullable();
+            
+            $table->integer('task_execution_id')->nullable();
+
+            // $table->integer('task_category_id')->nullable();
+            // $table->integer('task_event_id')->nullable();
+            $table->integer('task_event_step_id')->nullable();
+            
+            
+
+            $table->boolean('is_active')->default(true);
+            $table->string('remarks');
+
             $table->timestamps();
         });
     }

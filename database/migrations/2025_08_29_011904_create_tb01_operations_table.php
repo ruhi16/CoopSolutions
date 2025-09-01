@@ -15,6 +15,11 @@ class CreateTb01OperationsTable extends Migration
     {
         Schema::create('tb01_operations', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('description')->nullable();
+
+            $table->boolean('is_active')->default(true);
+            $table->string('remarks');
             $table->timestamps();
         });
     }

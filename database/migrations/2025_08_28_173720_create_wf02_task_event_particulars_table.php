@@ -15,6 +15,15 @@ class CreateWf02TaskEventParticularsTable extends Migration
     {
         Schema::create('wf02_task_event_particulars', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('description')->nullable();
+            
+            $table->integer('task_event_id')->nullable();
+
+            $table->boolean('is_active')->default(true);
+            $table->string('remarks');
+
+
             $table->timestamps();
         });
     }
