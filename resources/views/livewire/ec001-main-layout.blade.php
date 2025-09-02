@@ -110,14 +110,29 @@
                 
                 <!-- Level 2 Submenu -->
                 <div class="submenu mt-2 ml-4 space-y-1">
-                    @foreach($organisationMenus as $organisationMenu)
-                    <button 
-                        wire:click="setActiveMenu('{{ $organisationMenu['name'] }}')"
-                        class="menu-item flex items-center w-full space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200 {{ $organisationMenu['name'] == $activeMenu ? 'bg-gray-200' : ''}}">
-                        <i class="{{ $organisationMenu['icon']}} text-sm"></i>
-                        <span>{{ $organisationMenu['label'] }}</span>
-                    </button>
-                    @endforeach
+                    {{-- @foreach($organisationMenus as $mainOrganisationMenu) --}}
+                        {{-- <button class="menu-toggle flex items-center justify-between w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-users"></i>
+                                <span>$mainOrganisationMenu['label']</span>
+                            </div>
+                            <i class="fas fa-chevron-down transform transition-transform duration-200"></i>
+                        </button> --}}
+
+                        {{-- @foreach($mainOrganisationMenu['submenus'] as $organisationMenu) --}}
+                        @foreach($organisationMenus as $organisationMenu)
+                        <button 
+                            wire:click="setActiveMenu('{{ $organisationMenu['name'] }}')"
+                            class="menu-item flex items-center w-full space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200 {{ $organisationMenu['name'] == $activeMenu ? 'bg-gray-200' : ''}}">
+                            <i class="{{ $organisationMenu['icon']}} text-sm"></i>
+                            <span>{{ $organisationMenu['label'] }}</span>
+                        </button>
+                        @endforeach
+                    
+                    {{-- @endforeach --}}
+
+
+
                     {{-- <a href="#" class="flex items-center space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200">
                         <i class="fas fa-list text-sm"></i>
                         <span>Financial Year</span>
@@ -267,10 +282,14 @@
             {{-- @livewire('ec01-organisation') --}}
             @livewire($organisationMenus['organisation']['component'])
         @elseif($activeMenu == 'finyear')
-            @livewire($organisationMenus['finyear']['component']))
+            @livewire($organisationMenus['finyear']['component'])
         @elseif($activeMenu == 'officials')
             {{-- @livewire('ec02-financial-year') --}}
             {{-- @livewire($organisationMenus['officials']['component']) --}}
+        @elseif($activeMenu == 'members')
+            @livewire($organisationMenus['members']['component'])
+            {{-- @livewire('ec05-member-comp') --}}
+
         @elseif($activeMenu == 'loanscheme')
             @livewire($organisationMenus['loanscheme']['component'])
         @elseif($activeMenu == 'loanschemefeature')
