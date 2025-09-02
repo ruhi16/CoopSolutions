@@ -13,11 +13,11 @@ class Ec05MemberTypeComp extends Component
 
 
     public function refreshMemberTypes(){
-        $this->memberTypes = \App\Models\Ec05MemberType::all();
+        $this->memberTypes = \App\Models\Ec04MemberType::all();
     }
 
     public function mount(){
-        // $this->memberTypes = \App\Models\Ec05MemberType::all();
+        // $this->memberTypes = \App\Models\Ec04MemberType::all();
         
         $this->refreshMemberTypes();
 
@@ -25,7 +25,7 @@ class Ec05MemberTypeComp extends Component
 
     public function openModal($memberType_id = null){
         if($memberType_id){
-            $memberType_data = \App\Models\Ec05MemberType::find($memberType_id);
+            $memberType_data = \App\Models\Ec04MemberType::find($memberType_id);
             $this->name = $memberType_data->name;
             $this->description = $memberType_data->description;
             $this->showMemberTypeModal = true;
@@ -51,7 +51,7 @@ class Ec05MemberTypeComp extends Component
         ]);
     
         try {
-            $memberType_data = \App\Models\Ec05MemberType::updateOrCreate([
+            $memberType_data = \App\Models\Ec04MemberType::updateOrCreate([
                 'id' => $memberType_id,
             ],[
                 'name' => $this->name,
@@ -74,6 +74,6 @@ class Ec05MemberTypeComp extends Component
 
     public function render()
     {
-        return view('livewire.ec05-member-type');
+        return view('livewire.ec05-member-type-comp');
     }
 }

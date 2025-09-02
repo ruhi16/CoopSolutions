@@ -9,6 +9,7 @@ class Ec001MainLayout extends Component{
     public $activeMenu = 'dashboard';
 
     public $organisationMenus = [
+        
         'dashboard' => [
             'label' => 'Dashboard',
             'icon' => 'fas fa-tachometer-alt',
@@ -26,6 +27,12 @@ class Ec001MainLayout extends Component{
             'icon' => 'fas fa-cog',
             'name' => 'finyear',
             'component' =>'ec02-financial-year'
+        ],
+        'memberstype' => [
+            'label' => 'Members Type',
+            'icon' => 'fas fa-cog',
+            'name' => 'memberstype',
+            'component' =>'ec05-member-type-comp'
         ],
         'members' => [
             'label' => 'Members',
@@ -69,6 +76,39 @@ class Ec001MainLayout extends Component{
         //     'name' => 'loanassign',
         //     'component' =>'ec08-loan-assign-comp'
         // ],
+    ];
+
+    public $workflowMenuItems = [
+        'taskCategory' => [
+            'label' => 'Task Category',
+            'icon' => 'fas fa-tachometer-alt',
+            'name' => 'taskCategory',
+            'component' =>'wf01-task-category-comp'
+        ],
+        'task' => [
+            'label' => 'Task',
+            'icon' => 'fas fa-tachometer-alt',
+            'name' => 'task',
+            'component' =>'wf01-task-comp'
+        ],
+        'taskAssign' => [
+            'label' => 'Task Assign',
+            'icon' => 'fas fa-tachometer-alt',
+            'name' => 'taskAssign',
+            'component' =>'wf01-task-assign-comp'
+        ],
+        'taskHistory' => [
+            'label' => 'Task History',
+            'icon' => 'fas fa-tachometer-alt',
+            'name' => 'taskHistory',
+            'component' =>'wf01-task-history-comp'
+        ],
+        'taskReport' => [
+            'label' => 'Task Report',
+            'icon' => 'fas fa-tachometer-alt',
+            'name' => 'taskReport',
+            'component' =>'wf01-task-report-comp'
+        ],
     ];
     // public $organisationMenus = [
     //     'main-dashboard' => [

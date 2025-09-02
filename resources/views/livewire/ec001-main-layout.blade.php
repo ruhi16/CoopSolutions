@@ -172,6 +172,29 @@
                 </div>
             </div>
 
+            {{-- Task Menu --}}
+            <div class="px-4 py-2">
+                <button class="menu-toggle flex items-center justify-between w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-users"></i>
+                        <span>Task Menu</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform duration-200"></i>
+                </button>
+
+                <div class="submenu mt-2 ml-4 space-y-1">
+                    @foreach($workflowMenuItems as $workflowMenu)
+                        <button 
+                            wire:click="setActiveMenu('{{ $workflowMenu['name'] }}')"
+                            class="menu-item flex items-center w-full space-x-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all duration-200 {{ $workflowMenu['name'] == $activeMenu ? 'bg-gray-200' : ''}}">
+                            <i class="{{ $workflowMenu['icon']}} text-sm"></i>
+                            <span>{{ $workflowMenu['label'] }}</span>
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+
+
             <!-- Level 2 Menu - Content Management -->
             <div class="px-4 py-2">
                 <button class="menu-toggle flex items-center justify-between w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200">
@@ -276,6 +299,19 @@
         </div>
         
 
+        @if($activeMenu == 'taskCategory')
+            @livewire('wf01-task-category-comp')
+        @elseif($activeMenu == 'task')
+            @livewire('wf01-task-comp')
+        @elseif($activeMenu == 'taskAssign')
+            @livewire('wf01-task-assign-comp')
+        @elseif($activeMenu == 'taskHistory')
+            @livewire('wf01-task-history-comp')
+        @elseif($activeMenu == 'taskReport')
+            @livewire('wf01-task-report-comp')
+        @endif
+
+
         @if($activeMenu == 'dashboard')
 
         @elseif($activeMenu == 'organisation')
@@ -286,6 +322,11 @@
         @elseif($activeMenu == 'officials')
             {{-- @livewire('ec02-financial-year') --}}
             {{-- @livewire($organisationMenus['officials']['component']) --}}
+        
+        @elseif($activeMenu == 'memberstype')
+            {{-- @livewire($organisationMenus['memberstype']['component']) --}}
+            @livewire('ec05-member-type-comp')
+
         @elseif($activeMenu == 'members')
             @livewire($organisationMenus['members']['component'])
             {{-- @livewire('ec05-member-comp') --}}
