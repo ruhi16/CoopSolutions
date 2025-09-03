@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\Wf01TaskCagegory as Wf01TaskCategory;
+use App\Models\Wf01TaskCategory;
 
 class Wf01TaskCategoryComp extends Component
 {
@@ -76,7 +76,7 @@ class Wf01TaskCategoryComp extends Component
             'description' => $this->description,
             'remarks' => $this->remarks,
             'is_active' => $this->is_active,
-            'organisation_id' => Auth::user()->organisation_id ?? null,
+            'organisation_id' => auth()->user()->id ?? null,
         ];
 
         if ($this->isEditMode) {
@@ -97,7 +97,7 @@ class Wf01TaskCategoryComp extends Component
         $category = Wf01TaskCategory::findOrFail($categoryId);
         $category->update([
             'is_deleted' => true,
-            'deleted_by' => Auth::id(),
+            'deleted_by' => auth()->user()->id,
             'deleted_at' => now(),
         ]);
         

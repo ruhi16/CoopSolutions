@@ -36,6 +36,12 @@ class Ec01Organisation extends Model
         // 'id' is the primary key in the ec01_organisations table
 
     }
+
+    public function organisationOfficials(){
+        return $this->hasMany('\App\Models\Ec03OrganisatiionOfficial', 'organisation_id', 'id');
+    
+    
+    }
     
 
     

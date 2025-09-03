@@ -85,29 +85,29 @@ class Ec001MainLayout extends Component{
             'name' => 'taskCategory',
             'component' =>'wf01-task-category-comp'
         ],
-        'task' => [
-            'label' => 'Task',
+        'taskParticular' => [
+            'label' => 'Task Particular',
             'icon' => 'fas fa-tachometer-alt',
-            'name' => 'task',
-            'component' =>'wf01-task-comp'
+            'name' => 'taskParticular',
+            'component' =>'wf02-task-event-particular-comp'
         ],
-        'taskAssign' => [
-            'label' => 'Task Assign',
+        'taskParticularStatus' => [
+            'label' => 'Task Particular Status',
             'icon' => 'fas fa-tachometer-alt',
-            'name' => 'taskAssign',
-            'component' =>'wf01-task-assign-comp'
+            'name' => 'taskParticularStatus',
+            'component' =>'wf01-task-event-particular-status-comp'
         ],
-        'taskHistory' => [
-            'label' => 'Task History',
+        'taskEvent' => [
+            'label' => 'Task Event',
             'icon' => 'fas fa-tachometer-alt',
-            'name' => 'taskHistory',
-            'component' =>'wf01-task-history-comp'
+            'name' => 'taskEvent',
+            'component' =>'wf03-task-event-comp'
         ],
-        'taskReport' => [
-            'label' => 'Task Report',
+        'taskSchedule' => [
+            'label' => 'Task Schedule',
             'icon' => 'fas fa-tachometer-alt',
-            'name' => 'taskReport',
-            'component' =>'wf01-task-report-comp'
+            'name' => 'taskSchedule',
+            'component' =>'wf08-task-event-schedule-comp'
         ],
     ];
     // public $organisationMenus = [

@@ -35,7 +35,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
+    <!-- Header Navbar -->
     <header class="fixed top-0 left-0 right-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white h-16 flex items-center justify-between px-6 shadow-lg z-50">
         <div class="flex items-center space-x-4">
             <button id="sidebarToggle" class="p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all duration-200">
@@ -80,6 +80,7 @@
                     </a>
                 </div>
             </div>
+
         </div>
     </header>
 
@@ -238,6 +239,7 @@
                             </a>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -301,14 +303,22 @@
 
         @if($activeMenu == 'taskCategory')
             @livewire('wf01-task-category-comp')
-        @elseif($activeMenu == 'task')
-            @livewire('wf01-task-comp')
-        @elseif($activeMenu == 'taskAssign')
-            @livewire('wf01-task-assign-comp')
-        @elseif($activeMenu == 'taskHistory')
-            @livewire('wf01-task-history-comp')
+        
+        @elseif($activeMenu == 'taskParticular')
+            @livewire('wf02-task-event-particular-comp')
+        
+        @elseif($activeMenu == 'taskParticularStatus')
+            @livewire('wf02-task-event-particular-status-comp')
+        
+        @elseif($activeMenu == 'taskEvent')
+            @livewire('wf03-task-event-comp')
+        
+        @elseif($activeMenu == 'taskSchedule')
+            @livewire('wf01-task-event-schedule-comp')
+        
         @elseif($activeMenu == 'taskReport')
             @livewire('wf01-task-report-comp')
+        
         @endif
 
 
