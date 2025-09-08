@@ -35,7 +35,7 @@ class CreateWf08TaskEventSchedulesTable extends Migration
 
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

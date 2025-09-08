@@ -19,8 +19,9 @@ class CreateEc23BankLoanPaymentsTable extends Migration
             $table->string('description')->nullable();
 
             $table->integer('bank_loan_borrowed_id')->nullable();
+            $table->double('bank_loan_borrowed_current_balance', 10, 2)->nullable();
 
-            $table->double('installment_amount', 10, 2)->nullable();
+            $table->double('installment_total_amount', 10, 2)->nullable();
             $table->integer('installment_no')->nullable();
             
             
@@ -40,7 +41,7 @@ class CreateEc23BankLoanPaymentsTable extends Migration
             $table->date('finalized_at')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

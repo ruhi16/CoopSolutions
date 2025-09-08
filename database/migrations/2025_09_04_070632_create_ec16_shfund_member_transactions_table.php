@@ -41,7 +41,7 @@ class CreateEc16ShfundMemberTransactionsTable extends Migration
             $table->date('finalized_at')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

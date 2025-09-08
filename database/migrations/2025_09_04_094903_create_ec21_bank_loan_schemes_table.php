@@ -19,6 +19,8 @@ class CreateEc21BankLoanSchemesTable extends Migration
             $table->string('description')->nullable();
 
             $table->integer('bank_id')->nullable();
+
+            $table->date('effected_on')->nullable();
             
             $table->enum('status', ['running', 'completed', 'upcoming', 'suspended', 'cancelled'])->default('suspended')->nullable();
             
@@ -34,7 +36,7 @@ class CreateEc21BankLoanSchemesTable extends Migration
             $table->date('finalized_at')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

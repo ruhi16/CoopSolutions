@@ -21,7 +21,7 @@ class CreateEc20BankDetailsTable extends Migration
 
             
 
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+            $table->enum('status', ['running', 'completed', 'upcoming', 'suspended', 'cancelledished', 'archived'])->default('suspended');
             
             $table->integer('user_id')->nullable();
             $table->integer('organisation_id')->nullable();
@@ -32,7 +32,7 @@ class CreateEc20BankDetailsTable extends Migration
             $table->date('finalized_at')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

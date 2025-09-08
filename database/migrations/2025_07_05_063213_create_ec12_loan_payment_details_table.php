@@ -30,7 +30,7 @@ class CreateEc12LoanPaymentDetailsTable extends Migration
 
             $table->boolean('is_active')->default(true);
             $table->string('remarks')->nullable();
-            $table->timestamps();
+            $table->timestamps()->nullable();
         });
     }
 

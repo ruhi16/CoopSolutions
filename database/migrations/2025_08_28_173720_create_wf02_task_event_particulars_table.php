@@ -32,7 +32,7 @@ class CreateWf02TaskEventParticularsTable extends Migration
             $table->integer('organisation_id')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

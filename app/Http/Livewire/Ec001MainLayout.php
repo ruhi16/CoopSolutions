@@ -8,6 +8,81 @@ class Ec001MainLayout extends Component{
 
     public $activeMenu = 'dashboard';
 
+
+
+    public $testMenus = [
+
+        'mainMenu' =>[
+            'label' => 'Main Menu',
+            'icon' => 'fas fa-tachometer-alt',
+            'submenus' => [
+                'orgMenu' => [
+                    'dashboard' => [
+                        'label' => 'Dashboard',
+                        'icon' => 'fas fa-tachometer-alt',
+                        'name' => 'dashboard',
+                        'component' =>'ec01-organisation'
+                    ],
+                    'organisation' => [
+                        'label' => 'Organisation',
+                        'icon' => 'fas fa-cog',
+                        'name' => 'organisation',
+                        'component' =>'ec01-organisation'
+                    ],
+                    'finyear' => [
+                        'label' => 'Financial Year',
+                        'icon' => 'fas fa-cog',
+                        'name' => 'finyear',
+                        'component' =>'ec02-financial-year'
+                    ],
+                ],
+
+                'workflowMenu' => [
+                    'taskCategory' => [
+                        'label' => 'Task Category',
+                        'icon' => 'fas fa-tachometer-alt',
+                        'name' => 'taskCategory',
+                        'component' =>'wf01-task-category-comp'
+                    ],
+                    'taskParticular' => [
+                        'label' => 'Task Particular',
+                        'icon' => 'fas fa-tachometer-alt',
+                        'name' => 'taskParticular',
+                        'component' =>'wf02-task-event-particular-comp'
+                    ],
+                    'taskParticularStatus' => [
+                        'label' => 'Task Particular Status',
+                        'icon' => 'fas fa-tachometer-alt',
+                        'name' => 'taskParticularStatus',
+                        'component' =>'wf01-task-event-particular-status-comp'
+                    ],
+
+                    'memberMenu' => [
+                        'memberstype' => [
+                            'label' => 'Members Type',
+                            'icon' => 'fas fa-cog',
+                            'name' => 'memberstype',
+                            'component' =>'ec05-member-type-comp'
+                        ],
+                        'members' => [
+                            'label' => 'Members',
+                            'icon' => 'fas fa-cog',
+                            'name' => 'members',
+                            'component' =>'ec05-member-comp'
+                        ],
+                        'officials' => [
+                            'label' => 'Officials',
+                            'icon' => 'fas fa-cog',
+                            'name' => 'officials',
+                            'component' =>'ec03-officials'
+                        ],
+                    ]
+                ],
+            ],
+        ]
+
+    ];
+
     public $organisationMenus = [
         
         'dashboard' => [

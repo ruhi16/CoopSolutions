@@ -41,7 +41,7 @@ class CreateEc15ThfundTransactionsTable extends Migration
 
             $table->boolean('is_active')->default(true);
             $table->string('remarks');
-            $table->timestamps();
+            $table->timestamps()->nullable();
         });
     }
 

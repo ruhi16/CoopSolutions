@@ -18,11 +18,13 @@ class CreateEc21BankLoanBorrowedsTable extends Migration
             $table->string('name');
             $table->string('description')->nullable();
 
-            $table->integer('bank_loan_scheme_id')->nullable();
+            $table->integer('bank_loan_scheme_particular_id')->nullable();
 
             $table->double('loan_borrowed_amount', 10, 2)->nullable();
             $table->date('loan_borrowed_date')->nullable();
-            $table->integer('loan_assign_ref_id')->nullable();
+            $table->integer('loan_assign_ref_id')->nullable();  // for member_id(s)
+
+            $table->double('bank_loan_borrowed_previous_balance', 10, 2)->default(0.00);
 
 
             $table->double('installment_amount', 10, 2)->nullable();
@@ -44,7 +46,7 @@ class CreateEc21BankLoanBorrowedsTable extends Migration
             $table->date('finalized_at')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

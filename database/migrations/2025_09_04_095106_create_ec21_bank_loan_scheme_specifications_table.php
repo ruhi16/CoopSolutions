@@ -20,9 +20,10 @@ class CreateEc21BankLoanSchemeSpecificationsTable extends Migration
 
             $table->integer('bank_loan_scheme_id')->nullable();
 
-            $table->string('particular')->nullable();   // is_regular = true, it may be roi or serviec charge or other when is_regular = false, fine or others, specific amount
-            $table->double('particular_value', 10, 2)->nullable();
+            $table->integer('bank_loan_schema_particular_id')->nullable();
+            $table->double('bank_loan_schema_particular_value', 10, 2)->nullable();
             $table->double('is_percent_on_current_balance')->default(true);
+
             $table->boolean('is_regular')->default(true);  // scheduled = true or regular = null or false
 
 
@@ -44,7 +45,7 @@ class CreateEc21BankLoanSchemeSpecificationsTable extends Migration
             $table->date('finalized_at')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }
