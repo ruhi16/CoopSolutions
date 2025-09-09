@@ -7,9 +7,7 @@ use Livewire\Component;
 class Ec001MainLayout extends Component{
 
     public $activeMenu = 'dashboard';
-
-
-
+    
     public $testMenus = [
 
         'mainMenu' =>[
@@ -66,11 +64,11 @@ class Ec001MainLayout extends Component{
             'label' => 'Third Menu',
             'icon' => 'fas fa-cog',
             'submenus' => [
-                'memberstype' => [
-                    'label' => 'Members Type',
+                'bankDetails' => [
+                    'label' => 'Bank Detail',
                     'icon' => 'fas fa-cog',
-                    'name' => 'memberstype',
-                    'component' =>'ec05-member-type-comp'
+                    'name' => 'bankDetails',
+                    'component' =>'ec20-bank-detail-comp'
                 ],
                 'members' => [
                     'label' => 'Members',
@@ -86,6 +84,7 @@ class Ec001MainLayout extends Component{
                 ],
             ],
         ],
+
     ];
 
     

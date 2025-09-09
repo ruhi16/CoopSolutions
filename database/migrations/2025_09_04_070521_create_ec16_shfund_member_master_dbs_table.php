@@ -23,7 +23,7 @@ class CreateEc16ShfundMemberMasterDbsTable extends Migration
 
             $table->double('share_operational_amount', 10, 2)->nullable();
             $table->enum('share_operational_type',['deposit', 'withdrawal'])->nullable()->default(null);
-            $table->timestamps('share_operational_date')->useCurrent();
+            $table->timestamp('share_operational_date')->useCurrent();
 
 
             $table->double('share_current_balnce')->nullable(); //****/

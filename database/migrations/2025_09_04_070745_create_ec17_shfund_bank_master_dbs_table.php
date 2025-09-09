@@ -26,7 +26,7 @@ class CreateEc17ShfundBankMasterDbsTable extends Migration
 
             $table->double('bank_share_operational_amount', 10, 2)->nullable();
             $table->enum('bank_share_operational_type',['deposit', 'withdrawal'])->nullable()->default(null);
-            $table->timestamps('bank_share_operational_date')->useCurrent();
+            $table->timestamp('bank_share_operational_date')->useCurrent();
 
 
             $table->double('bank_share_current_balnce')->nullable(); //****/

@@ -226,6 +226,7 @@
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
                     <p class="text-gray-600 mt-1">Welcome back, John! Here's what's happening with your admin panel.</p>
+                    <p class="text-gray-600 mt-1 font-semibold">Active Menu: {{ $activeMenu ?? 'Not Selected' }}</p>
                 </div>
                 <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
                     <i class="fas fa-plus"></i>
@@ -254,6 +255,19 @@
             @livewire('wf01-task-report-comp')
         
         @endif
+
+
+        @if($activeMenu == 'bankDetails')
+            @livewire('ec20-bank-detail-comp')
+
+        @endif
+
+
+
+
+
+
+
 
 
         @if($activeMenu == 'dashboard')

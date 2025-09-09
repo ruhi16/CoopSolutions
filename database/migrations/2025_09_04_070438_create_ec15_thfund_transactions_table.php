@@ -23,7 +23,7 @@ class CreateEc15ThfundTransactionsTable extends Migration
             $table->string('transaction_id');   
             $table->enum('transaction_type',['deposit', 'withdrawal'])->nullable()->default(null);
             $table->double('transaction_amount', 10, 2)->nullable();
-            $table->timestamps('transaction_date')->useCurrent();
+            $table->timestamp('transaction_date')->useCurrent();
             $table->string('transaction_reasons')->nullable();   
 
             $table->integer('task_execution_id')->nullable();   //****/  
@@ -40,8 +40,8 @@ class CreateEc15ThfundTransactionsTable extends Migration
             $table->date('finalized_at')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->string('remarks');
-            $table->timestamps()->nullable();
+            $table->string('remarks')->nullable();
+            $table->timestamps();
         });
     }
 
