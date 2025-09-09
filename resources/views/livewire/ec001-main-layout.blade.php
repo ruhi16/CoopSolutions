@@ -260,6 +260,10 @@
         @if($activeMenu == 'bankDetails')
             @livewire('ec20-bank-detail-comp')
 
+        @elseif($activeMenu == 'bankLoanSchema')
+            @livewire('ec21-bank-loan-schema-comp')
+
+
         @endif
 
 
