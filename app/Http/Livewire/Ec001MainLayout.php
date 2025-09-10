@@ -76,13 +76,12 @@ class Ec001MainLayout extends Component{
                     'name' => 'bankDetails',
                     'component' =>'ec20-bank-detail-comp'
                 ],
-                // 'bankLoanSchema' => [
-                //     'label' => 'Bank Schema',
-                //     'icon' => 'fas fa-cog',
-                //     'name' => 'bankLoanSchema',
-                //     'component' =>'ec21-bank-loan-schema-comp'
-                // ],
-
+                'members' => [
+                    'label' => 'Members',
+                    'icon' => 'fas fa-cog',
+                    'name' => 'members',
+                    'component' =>'ec05-member-comp'
+                ],
                 'officials' => [
                     'label' => 'Officials',
                     'icon' => 'fas fa-cog',
