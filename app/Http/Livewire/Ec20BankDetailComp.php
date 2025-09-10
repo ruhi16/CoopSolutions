@@ -73,6 +73,7 @@ class Ec20BankDetailComp extends Component{
 
     public function openModal()
     {
+        // dd('open modal');
         $this->isOpen = true;
     }
 
@@ -135,6 +136,7 @@ class Ec20BankDetailComp extends Component{
     public function edit($id)
     {
         $bank = Ec20Bank::findOrFail($id);
+        // dd($bank);
         $this->bankId = $id;
         $this->name = $bank->name;
         $this->description = $bank->description;

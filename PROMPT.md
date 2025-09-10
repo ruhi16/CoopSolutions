@@ -1,0 +1,8 @@
+create a livewire 2.75 component with view according to the front-end style home.blade.php file support laravel 8 and with the following properties with all CRUD operations.
+in front-end there should be 2 tab, 
+
+the second tab is correspond to the ec21_bank_loan_schema_particulars.php migration, normal table of data should be shown, wehn Add Schema button clicked a modal should be popped up and all data should be taken to save the database. data properties should follw the migration data type.
+
+the first tab should be a consolidated of two migrations i.e ec21_bank_loan_schema.php and ec21_bank_loan_schema_specifications.php migration files. It show each bank loan schema name with its corresponds, then it should show all the mandatory and optional particulars bellow the row as table of information. now for CRUD operation to enter new data it should show a modal in first section it should take informatiaon for loan_schema table, only then it should activated and take the mandatory schema_particulars values then optional particulars values if required, 
+in the view of the livewire component each row should prominently define its sub-table of specifications, use some sophisticated background color for visual impact.
+those schema particulars are not optional, that must have be valued when define a loan specification but optional schema particulars are not mandatory it may be added latter time. modal should compact and concise.

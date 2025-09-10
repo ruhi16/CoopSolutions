@@ -260,6 +260,10 @@
         @if($activeMenu == 'bankDetails')
             @livewire('ec20-bank-detail-comp')
 
+        @elseif($activeMenu == 'bankLoanSchema')
+            @livewire('ec21-bank-loan-specification')
+
+
         @endif
 
 
@@ -273,12 +277,13 @@
         @if($activeMenu == 'dashboard')
 
         @elseif($activeMenu == 'organisation')
-            {{-- @livewire('ec01-organisation') --}}
-            @livewire($organisationMenus['organisation']['component'])
+            @livewire('ec01-organisation')
+            {{-- @livewire($organisationMenus['organisation']['component']) --}}
         @elseif($activeMenu == 'finyear')
-            @livewire($organisationMenus['finyear']['component'])
+            @livewire('ec02-financial-year')
+            {{-- @livewire($organisationMenus['finyear']['component']) --}}
         @elseif($activeMenu == 'officials')
-            {{-- @livewire('ec02-financial-year') --}}
+            @livewire('ec02-financial-year')
             {{-- @livewire($organisationMenus['officials']['component']) --}}
         
         @elseif($activeMenu == 'memberstype')
@@ -286,15 +291,15 @@
             @livewire('ec05-member-type-comp')
 
         @elseif($activeMenu == 'members')
-            @livewire($organisationMenus['members']['component'])
+            {{-- @livewire($organisationMenus['members']['component']) --}}
             {{-- @livewire('ec05-member-comp') --}}
 
         @elseif($activeMenu == 'loanscheme')
-            @livewire($organisationMenus['loanscheme']['component'])
+            {{-- @livewire($organisationMenus['loanscheme']['component']) --}}
         @elseif($activeMenu == 'loanschemefeature')
 
-            {{ $activeMenu }}: {{ $organisationMenus['loanschemefeature']['component'] }}
-            @livewire($organisationMenus['loanschemefeature']['component'])
+            {{-- {{ $activeMenu }}: {{ $organisationMenus['loanschemefeature']['component'] }} --}}
+            {{-- @livewire($organisationMenus['loanschemefeature']['component']) --}}
             {{-- @livewire('ec07-loan-scheme-feature-comp') --}}
         
         @elseif($activeMenu == 'loanschemedetail')
