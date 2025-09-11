@@ -45,6 +45,13 @@ class Ec001MainLayout extends Component{
                     'component' =>'ec08-member-loan-request-comp'
                 
                 ],
+                'loanRequest2' => [
+                    'label' => 'Loan Request 2',
+                    'icon' => 'fas fa-cog',
+                    'name' => 'loanRequest2',
+                    'component' =>'ec08-member-loan-request-comp2'
+                
+                ],
             ],
         ],
 

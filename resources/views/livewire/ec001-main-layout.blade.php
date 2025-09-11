@@ -266,6 +266,9 @@
         @elseif($activeMenu == 'loanRequest')
             @livewire('ec08-member-loan-request-comp')
 
+        @elseif($activeMenu == 'loanRequest2')
+            @livewire('ec08-member-loan-request-comp2')
+
             
         @endif
 
