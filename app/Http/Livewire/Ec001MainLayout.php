@@ -38,6 +38,13 @@ class Ec001MainLayout extends Component{
                     'name' => 'bankLoanSchema',
                     'component' =>'ec21-bank-loan-specification'
                 ],
+                'loanRequest' => [
+                    'label' => 'Loan Request',
+                    'icon' => 'fas fa-cog',
+                    'name' => 'loanRequest',
+                    'component' =>'ec08-member-loan-request-comp'
+                
+                ],
             ],
         ],
 
