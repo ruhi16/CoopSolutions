@@ -9,91 +9,188 @@ class Ec001MainLayout extends Component{
     public $activeMenu = 'dashboard';
     
     public $testMenus = [
-
-        'mainMenu' =>[
-            'label' => 'Main Menu',
-            'icon' => 'fas fa-tachometer-alt',
+        'orgSetup' => [
+            'label' => 'Organization Setup',
+            'icon' => 'fas fa-building',
+            'role' => 'admin,manager',
             'submenus' => [
                 'dashboard' => [
                     'label' => 'Dashboard',
                     'icon' => 'fas fa-tachometer-alt',
                     'name' => 'dashboard',
-                    'component' =>'ec01-organisation'
+                    'component' => 'dashboard'
                 ],
                 'organisation' => [
-                    'label' => 'Organisation',
-                    'icon' => 'fas fa-cog',
+                    'label' => 'Organization Info',
+                    'icon' => 'fas fa-building',
                     'name' => 'organisation',
-                    'component' =>'ec01-organisation'
+                    'component' => 'ec01-organisation'
                 ],
                 'finyear' => [
-                    'label' => 'Financial Year',
-                    'icon' => 'fas fa-cog',
+                    'label' => 'Financial Years',
+                    'icon' => 'fas fa-calendar-alt',
                     'name' => 'finyear',
-                    'component' =>'ec02-financial-year'
+                    'component' => 'ec02-financial-year'
                 ],
-                'bankLoanSchema' => [
-                    'label' => 'Bank Schema',
-                    'icon' => 'fas fa-cog',
-                    'name' => 'bankLoanSchema',
-                    'component' =>'ec21-bank-loan-specification'
-                ],
-                'loanRequest' => [
-                    'label' => 'Loan Request',
-                    'icon' => 'fas fa-cog',
-                    'name' => 'loanRequest',
-                    'component' =>'ec08-member-loan-request-comp'
-                
-                ],
-            ],
-        ],
-
-        'secondMenu' => [
-            'label' => 'Second Menu',
-            'icon' => 'fas fa-cog',
-            'submenus' => [                
-                'taskCategory' => [
-                    'label' => 'Task Category',
-                    'icon' => 'fas fa-tachometer-alt',
-                    'name' => 'taskCategory',
-                    'component' =>'wf01-task-category-comp'
-                ],
-                'taskParticular' => [
-                    'label' => 'Task Particular',
-                    'icon' => 'fas fa-tachometer-alt',
-                    'name' => 'taskParticular',
-                    'component' =>'wf02-task-event-particular-comp'
-                ],
-                'taskParticularStatus' => [
-                    'label' => 'Task Particular Status',
-                    'icon' => 'fas fa-tachometer-alt',
-                    'name' => 'taskParticularStatus',
-                    'component' =>'wf01-task-event-particular-status-comp'
-                ],
-            ],
-        ],
-
-        'thirdMenu' => [
-            'label' => 'Third Menu',
-            'icon' => 'fas fa-cog',
-            'submenus' => [
-                'bankDetails' => [
-                    'label' => 'Bank Detail',
-                    'icon' => 'fas fa-cog',
-                    'name' => 'bankDetails',
-                    'component' =>'ec20-bank-detail-comp'
-                ],
-                'members' => [
-                    'label' => 'Members',
-                    'icon' => 'fas fa-cog',
-                    'name' => 'members',
-                    'component' =>'ec05-member-comp'
+                'memberstype' => [
+                    'label' => 'Member Types',
+                    'icon' => 'fas fa-users-cog',
+                    'name' => 'memberstype',
+                    'component' => 'ec05-member-type-comp'
                 ],
                 'officials' => [
-                    'label' => 'Officials',
-                    'icon' => 'fas fa-cog',
+                    'label' => 'Organization Officials',
+                    'icon' => 'fas fa-user-tie',
                     'name' => 'officials',
-                    'component' =>'ec03-officials'
+                    'component' => 'ec03-officials-comp'
+                ],
+            ],
+        ],
+
+        'memberMgmt' => [
+            'label' => 'Member Management',
+            'icon' => 'fas fa-users',
+            'role' => 'admin,manager,officer',
+            'submenus' => [
+                'members' => [
+                    'label' => 'Member Registration',
+                    'icon' => 'fas fa-user-plus',
+                    'name' => 'members',
+                    'component' => 'ec04-member-comp'
+                ],
+                'memberImport' => [
+                    'label' => 'Bulk Import',
+                    'icon' => 'fas fa-file-import',
+                    'name' => 'memberImport',
+                    'component' => 'ec04-member-import-comp'
+                ],
+                'memberProfile' => [
+                    'label' => 'Member Profiles',
+                    'icon' => 'fas fa-id-card',
+                    'name' => 'memberProfile',
+                    'component' => 'ec04-member-profile-comp'
+                ],
+            ],
+        ],
+
+        'loanMgmt' => [
+            'label' => 'Loan Management',
+            'icon' => 'fas fa-hand-holding-usd',
+            'role' => 'admin,manager,officer',
+            'submenus' => [
+                'loanscheme' => [
+                    'label' => 'Loan Schemes',
+                    'icon' => 'fas fa-list-alt',
+                    'name' => 'loanscheme',
+                    'component' => 'ec06-loan-scheme-comp'
+                ],
+                'loanschemedetail' => [
+                    'label' => 'Scheme Details',
+                    'icon' => 'fas fa-info-circle',
+                    'name' => 'loanschemedetail',
+                    'component' => 'ec07-loan-scheme-detail-comp'
+                ],
+                'loanrequest' => [
+                    'label' => 'Loan Applications',
+                    'icon' => 'fas fa-file-alt',
+                    'name' => 'loanrequest',
+                    'component' => 'ec08-loan-request-comp'
+                ],
+                'loanassign' => [
+                    'label' => 'Loan Assignment',
+                    'icon' => 'fas fa-handshake',
+                    'name' => 'loanassign',
+                    'component' => 'ec08-loan-assign-comp'
+                ],
+            ],
+        ],
+
+        'fundMgmt' => [
+            'label' => 'Fund Management',
+            'icon' => 'fas fa-piggy-bank',
+            'role' => 'admin,manager,officer',
+            'submenus' => [
+                'thriftFund' => [
+                    'label' => 'Thrift Fund',
+                    'icon' => 'fas fa-coins',
+                    'name' => 'thriftFund',
+                    'component' => 'ec15-thfund-comp'
+                ],
+                'shareFundMember' => [
+                    'label' => 'Member Share Fund',
+                    'icon' => 'fas fa-share-alt',
+                    'name' => 'shareFundMember',
+                    'component' => 'ec16-shfund-member-comp'
+                ],
+                'shareFundBank' => [
+                    'label' => 'Bank Share Fund',
+                    'icon' => 'fas fa-university',
+                    'name' => 'shareFundBank',
+                    'component' => 'ec17-shfund-bank-comp'
+                ],
+            ],
+        ],
+
+        'bankingOps' => [
+            'label' => 'Banking Operations',
+            'icon' => 'fas fa-university',
+            'role' => 'admin,manager',
+            'submenus' => [
+                'bankDetails' => [
+                    'label' => 'Bank Management',
+                    'icon' => 'fas fa-building-columns',
+                    'name' => 'bankDetails',
+                    'component' => 'ec20-bank-detail-comp'
+                ],
+                'bankLoanSchema' => [
+                    'label' => 'Bank Loan Schemes',
+                    'icon' => 'fas fa-file-contract',
+                    'name' => 'bankLoanSchema',
+                    'component' => 'ec21-bank-loan-specification'
+                ],
+                'bankLoanBorrowed' => [
+                    'label' => 'Bank Borrowings',
+                    'icon' => 'fas fa-money-bill-wave',
+                    'name' => 'bankLoanBorrowed',
+                    'component' => 'ec21-bank-loan-borrowed-comp'
+                ],
+            ],
+        ],
+
+        'workflow' => [
+            'label' => 'Workflow Management',
+            'icon' => 'fas fa-tasks',
+            'role' => 'admin,manager',
+            'submenus' => [
+                'taskCategory' => [
+                    'label' => 'Task Categories',
+                    'icon' => 'fas fa-folder',
+                    'name' => 'taskCategory',
+                    'component' => 'wf01-task-category-comp'
+                ],
+                'taskParticular' => [
+                    'label' => 'Task Particulars',
+                    'icon' => 'fas fa-list',
+                    'name' => 'taskParticular',
+                    'component' => 'wf02-task-event-particular-comp'
+                ],
+                'taskParticularStatus' => [
+                    'label' => 'Task Status',
+                    'icon' => 'fas fa-check-circle',
+                    'name' => 'taskParticularStatus',
+                    'component' => 'wf02-task-event-particular-status-comp'
+                ],
+                'taskEvent' => [
+                    'label' => 'Task Events',
+                    'icon' => 'fas fa-calendar-check',
+                    'name' => 'taskEvent',
+                    'component' => 'wf03-task-event-comp'
+                ],
+                'taskSchedule' => [
+                    'label' => 'Task Scheduling',
+                    'icon' => 'fas fa-clock',
+                    'name' => 'taskSchedule',
+                    'component' => 'wf08-task-event-schedule-comp'
                 ],
             ],
         ],
