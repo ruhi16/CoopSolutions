@@ -838,6 +838,12 @@ select {
 .z-50 {
   z-index: 50;
 }
+<<<<<<< HEAD
+=======
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+>>>>>>> 41cfbc96f65babd94ed4b085904261a18eb7aae6
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -1376,6 +1382,10 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity, 1));
 }
+.bg-orange-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 237 213 / var(--tw-bg-opacity, 1));
+}
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -1705,6 +1715,14 @@ select {
 .text-yellow-800 {
   --tw-text-opacity: 1;
   color: rgb(133 77 14 / var(--tw-text-opacity, 1));
+}
+.text-orange-800 {
+  --tw-text-opacity: 1;
+  color: rgb(154 52 18 / var(--tw-text-opacity, 1));
+}
+.text-purple-800 {
+  --tw-text-opacity: 1;
+  color: rgb(107 33 168 / var(--tw-text-opacity, 1));
 }
 .underline {
   text-decoration-line: underline;

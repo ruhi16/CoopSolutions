@@ -154,6 +154,13 @@ class Ec001MainLayout extends Component{
                     'name' => 'bankLoanBorrowed',
                     'component' => 'ec21-bank-loan-borrowed-comp'
                 ],
+                'loanRequest2' => [
+                    'label' => 'Loan Request 2',
+                    'icon' => 'fas fa-cog',
+                    'name' => 'loanRequest2',
+                    'component' =>'ec08-member-loan-request-comp2'
+                
+                ],
             ],
         ],
 

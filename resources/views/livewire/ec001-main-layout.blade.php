@@ -228,183 +228,45 @@
                     <p class="text-gray-600 mt-1">Welcome back! Here's your system overview.</p>
                     <p class="text-gray-600 mt-1 font-semibold">Active Menu: {{ $activeMenu ?? 'Dashboard' }}</p>
                 </div>
-                <div class="flex space-x-3">
-                    <!-- Quick Actions -->
-                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
-                        <i class="fas fa-user-plus"></i>
-                        <span>New Member</span>
-                    </button>
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
-                        <i class="fas fa-file-alt"></i>
-                        <span>New Application</span>
-                    </button>
-                    <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span>Payment Entry</span>
-                    </button>
-                </div>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200">
+                    <i class="fas fa-plus"></i>
+                    <span>Add New</span>
+                </button>
             </div>
-            
-            <!-- Setup Progress Indicator -->
-            @if($activeMenu == 'dashboard')
-            <div class="mt-6 bg-gray-50 rounded-lg p-4">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">System Setup Progress</h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <!-- Organization Setup -->
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check text-green-600 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Organization Setup</p>
-                            <p class="text-xs text-gray-500">Complete</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Member Types -->
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check text-green-600 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Member Types</p>
-                            <p class="text-xs text-gray-500">4 types configured</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Loan Schemes -->
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-clock text-yellow-600 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Loan Schemes</p>
-                            <p class="text-xs text-gray-500">In progress</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Banking Setup -->
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-plus text-gray-400 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Banking Setup</p>
-                            <p class="text-xs text-gray-500">Pending</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
         </div>
         
 
-        @if($activeMenu == 'dashboard')
-            <!-- Dashboard Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600">Total Members</p>
-                            <p class="text-2xl font-bold text-gray-900">1,234</p>
-                        </div>
-                        <div class="bg-blue-100 p-3 rounded-full">
-                            <i class="fas fa-users text-blue-600"></i>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center">
-                        <span class="text-green-600 text-sm font-medium">+12</span>
-                        <span class="text-gray-600 text-sm ml-2">new this month</span>
-                    </div>
-                </div>
+        @if($activeMenu == 'taskCategory')
+            @livewire('wf01-task-category-comp')
+        
+        @elseif($activeMenu == 'taskParticular')
+            @livewire('wf02-task-event-particular-comp')
+        
+        @elseif($activeMenu == 'taskParticularStatus')
+            @livewire('wf02-task-event-particular-status-comp')
+        
+        @elseif($activeMenu == 'taskEvent')
+            @livewire('wf03-task-event-comp')
+        
+        @elseif($activeMenu == 'taskSchedule')
+            @livewire('wf01-task-event-schedule-comp')
+        
+        @elseif($activeMenu == 'taskReport')
+            @livewire('wf01-task-report-comp')
+        
+        @endif
 
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600">Active Loans</p>
-                            <p class="text-2xl font-bold text-gray-900">₹45,67,890</p>
-                        </div>
-                        <div class="bg-green-100 p-3 rounded-full">
-                            <i class="fas fa-hand-holding-usd text-green-600"></i>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center">
-                        <span class="text-green-600 text-sm font-medium">+8%</span>
-                        <span class="text-gray-600 text-sm ml-2">from last month</span>
-                    </div>
-                </div>
 
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600">Pending Applications</p>
-                            <p class="text-2xl font-bold text-gray-900">23</p>
-                        </div>
-                        <div class="bg-purple-100 p-3 rounded-full">
-                            <i class="fas fa-file-alt text-purple-600"></i>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center">
-                        <span class="text-red-600 text-sm font-medium">5 urgent</span>
-                        <span class="text-gray-600 text-sm ml-2">require attention</span>
-                    </div>
-                </div>
+        @if($activeMenu == 'bankDetails')
+            @livewire('ec20-bank-detail-comp')
 
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600">Collection Rate</p>
-                            <p class="text-2xl font-bold text-gray-900">94.2%</p>
-                        </div>
-                        <div class="bg-yellow-100 p-3 rounded-full">
-                            <i class="fas fa-chart-line text-yellow-600"></i>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center">
-                        <span class="text-green-600 text-sm font-medium">+2.1%</span>
-                        <span class="text-gray-600 text-sm ml-2">improvement</span>
-                    </div>
-                </div>
-            </div>
+        @elseif($activeMenu == 'bankLoanSchema')
+            @livewire('ec21-bank-loan-specification')
 
-            <!-- Recent Activity -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
-                <div class="space-y-4">
-                    <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user-plus text-blue-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-sm font-medium text-gray-900">New member registered</p>
-                            <p class="text-sm text-gray-600">RAJESH KUMAR joined as Regular Member</p>
-                        </div>
-                        <span class="text-sm text-gray-500">2 hours ago</span>
-                    </div>
-                    
-                    <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check-circle text-green-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-sm font-medium text-gray-900">Loan approved</p>
-                            <p class="text-sm text-gray-600">₹50,000 loan approved for PRIYA SHARMA</p>
-                        </div>
-                        <span class="text-sm text-gray-500">4 hours ago</span>
-                    </div>
-                    
-                    <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-money-bill-wave text-purple-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-sm font-medium text-gray-900">Payment received</p>
-                            <p class="text-sm text-gray-600">EMI payment of ₹5,200 from AMIT SINGH</p>
-                        </div>
-                        <span class="text-sm text-gray-500">6 hours ago</span>
-                    </div>
-                </div>
-            </div>
+        @elseif($activeMenu == 'loanRequest')
+            @livewire('ec08-member-loan-request-comp')
+
+            
         @endif
         
         <!-- Component Rendering Based on Active Menu -->
