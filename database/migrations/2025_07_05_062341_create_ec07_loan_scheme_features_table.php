@@ -15,10 +15,11 @@ class CreateEc07LoanSchemeFeaturesTable extends Migration
     {
         Schema::create('ec07_loan_scheme_features', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->string('loan_scheme_feature_name');
-            $table->string('loan_scheme_feature_type');
+            $table->string('name')->nullable();
+            $table->string('description')->nullable();
+            $table->string('loan_scheme_feature_name')->nullable();
+            $table->string('loan_scheme_feature_type')->nullable();
+            $table->string('loan_scheme_feature_unit')->nullable();
             $table->boolean('is_required')->default(1);
 
 

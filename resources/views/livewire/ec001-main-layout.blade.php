@@ -277,24 +277,32 @@
                     @livewire('ec01-organisation')
                 @elseif($activeMenu == 'finyear')
                     @livewire('ec02-financial-year')
-                @elseif($activeMenu == 'memberstype')
-                    @livewire('ec05-member-type-comp')
+                @elseif($activeMenu == 'officials')
+                    @livewire('ec03-organisation-official-comp')
+                {{-- @elseif($activeMenu == 'memberstype')
+                    @livewire('ec05-member-type-comp') --}}
                 @elseif($activeMenu == 'officials')
                     @livewire('ec03-officials-comp')
                     
                 {{-- Member Management Components --}}
                 @elseif($activeMenu == 'members')
-                    @livewire('ec04-member-comp')
-                @elseif($activeMenu == 'memberImport')
-                    @livewire('ec04-member-import-comp')
-                @elseif($activeMenu == 'memberProfile')
-                    @livewire('ec04-member-profile-comp')
+                    @livewire('ec05-member-comp')
+                @elseif($activeMenu == 'memberstype')
+                    @livewire('ec05-member-type-comp')
+
+                {{-- @elseif($activeMenu == 'memberProfile')
+                    @livewire('ec04-member-profile-comp') --}}
                     
                 {{-- Loan Management Components --}}
                 @elseif($activeMenu == 'loanscheme')
                     @livewire('ec06-loan-scheme-comp')
                 @elseif($activeMenu == 'loanschemedetail')
                     @livewire('ec07-loan-scheme-detail-comp')
+                
+                @elseif($activeMenu == 'loanschemefeature')
+                    @livewire('ec07-loan-scheme-feature-comp')
+                
+                {{-- Loan Request Management Components --}}
                 @elseif($activeMenu == 'loanrequest')
                     @livewire('ec08-loan-request-comp')
                 @elseif($activeMenu == 'loanassign')

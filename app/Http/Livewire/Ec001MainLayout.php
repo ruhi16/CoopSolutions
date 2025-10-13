@@ -32,12 +32,12 @@ class Ec001MainLayout extends Component{
                     'name' => 'finyear',
                     'component' => 'ec02-financial-year'
                 ],
-                'memberstype' => [
-                    'label' => 'Member Types',
-                    'icon' => 'fas fa-users-cog',
-                    'name' => 'memberstype',
-                    'component' => 'ec05-member-type-comp'
-                ],
+                // 'memberstype' => [
+                //     'label' => 'Member Types',
+                //     'icon' => 'fas fa-users-cog',
+                //     'name' => 'memberstype',
+                //     'component' => 'ec05-member-type-comp'
+                // ],
                 'officials' => [
                     'label' => 'Organization Officials',
                     'icon' => 'fas fa-user-tie',
@@ -48,28 +48,34 @@ class Ec001MainLayout extends Component{
         ],
 
         'memberMgmt' => [
-            'label' => 'Member Management',
+            'label' => 'Members List',
             'icon' => 'fas fa-users',
             'role' => 'admin,manager,officer',
             'submenus' => [
                 'members' => [
-                    'label' => 'Member Registration',
+                    'label' => 'Members',
                     'icon' => 'fas fa-user-plus',
                     'name' => 'members',
-                    'component' => 'ec04-member-comp'
+                    'component' => 'ec05-member-comp'
                 ],
-                'memberImport' => [
-                    'label' => 'Bulk Import',
-                    'icon' => 'fas fa-file-import',
-                    'name' => 'memberImport',
-                    'component' => 'ec04-member-import-comp'
+                 'memberstype' => [
+                    'label' => 'Member Type',
+                    'icon' => 'fas fa-user-plus',
+                    'name' => 'memberstype',
+                    'component' => 'ec05-member-type-comp'
                 ],
-                'memberProfile' => [
-                    'label' => 'Member Profiles',
-                    'icon' => 'fas fa-id-card',
-                    'name' => 'memberProfile',
-                    'component' => 'ec04-member-profile-comp'
-                ],
+                // 'memberImport' => [
+                //     'label' => 'Bulk Import',
+                //     'icon' => 'fas fa-file-import',
+                //     'name' => 'memberImport',
+                //     'component' => 'ec05-member-import-comp'
+                // ],
+                // 'memberProfile' => [
+                //     'label' => 'Member Profiles',
+                //     'icon' => 'fas fa-id-card',
+                //     'name' => 'memberProfile',
+                //     'component' => 'ec05-member-profile-comp'
+                // ],
             ],
         ],
 
@@ -89,6 +95,12 @@ class Ec001MainLayout extends Component{
                     'icon' => 'fas fa-info-circle',
                     'name' => 'loanschemedetail',
                     'component' => 'ec07-loan-scheme-detail-comp'
+                ],
+                'loanschemefeature' => [
+                    'label' => 'Scheme Features',
+                    'icon' => 'fas fa-info-circle',
+                    'name' => 'loanschemefeature',
+                    'component' => 'ec07-loan-scheme-feature-comp'
                 ],
                 'loanrequest' => [
                     'label' => 'Loan Applications',
