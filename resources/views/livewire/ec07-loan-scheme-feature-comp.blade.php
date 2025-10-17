@@ -1,5 +1,4 @@
 <div>
-
     <div class="rounded-lg shadow-sm overflow-hidden">
         <div id="alert-container" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
             @if (session()->has('success'))
@@ -47,16 +46,16 @@
                         Name <i class="fas fa-sort text-gray-400 ml-1"></i>
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="id">
-                        Account No <i class="fas fa-sort text-gray-400 ml-1"></i>
+                        Feature Name <i class="fas fa-sort text-gray-400 ml-1"></i>
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="id">
-                        Address <i class="fas fa-sort text-gray-400 ml-1"></i>
+                        Feature Type <i class="fas fa-sort text-gray-400 ml-1"></i>
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="id">
-                        Address <i class="fas fa-sort text-gray-400 ml-1"></i>
+                        Required <i class="fas fa-sort text-gray-400 ml-1"></i>
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="id">
-                        Address <i class="fas fa-sort text-gray-400 ml-1"></i>
+                        Active <i class="fas fa-sort text-gray-400 ml-1"></i>
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="id">
                         Actions <i class="fas fa-sort text-gray-400 ml-1"></i>
@@ -70,8 +69,8 @@
                     <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->name }}</td>
                     <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->loan_scheme_feature_name }}</td>
                     <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->loan_scheme_feature_type }}</td>
-                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->is_required }}</td>
-                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->is_active }}</td>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->is_required ? 'Yes' : 'No' }}</td>
+                    <td class="px-4 py-1 text-sm font-bold text-gray-900">{{ $loanSchemeFeature->is_active ? 'Yes' : 'No' }}</td>
                     <td class="px-4 py-1 text-sm font-bold text-gray-900">
                         <button wire:click="edit({{ $loanSchemeFeature->id }})" class="text-blue-600 hover:text-blue-900 mr-2">
                             <i class="fas fa-edit"></i>
@@ -86,12 +85,80 @@
         </table>
     </div>
 
-
-
-
-
-
-
-
-
+    <!-- Modal -->
+    @if($isOpen)
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">{{ $loan_scheme_feature_id ? 'Edit Loan Scheme Feature' : 'Add New Loan Scheme Feature' }}</h2>
+                <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form wire:submit.prevent="store">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-2">
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input wire:model="name" type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="col-span-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea wire:model="description" id="description" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <label for="loan_scheme_feature_name" class="block text-sm font-medium text-gray-700 mb-2">Feature Name</label>
+                        <input wire:model="loan_scheme_feature_name" type="text" id="loan_scheme_feature_name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        @error('loan_scheme_feature_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <label for="loan_scheme_feature_type" class="block text-sm font-medium text-gray-700 mb-2">Feature Type</label>
+                        <input wire:model="loan_scheme_feature_type" type="text" id="loan_scheme_feature_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        @error('loan_scheme_feature_type') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <label for="loan_scheme_feature_unit" class="block text-sm font-medium text-gray-700 mb-2">Feature Unit</label>
+                        <input wire:model="loan_scheme_feature_unit" type="text" id="loan_scheme_feature_unit" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        @error('loan_scheme_feature_unit') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <label for="remarks" class="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
+                        <input wire:model="remarks" type="text" id="remarks" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        @error('remarks') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <label class="flex items-center">
+                            <input wire:model="is_required" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <span class="ml-2 text-sm text-gray-600">Required</span>
+                        </label>
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <label class="flex items-center">
+                            <input wire:model="is_active" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <span class="ml-2 text-sm text-gray-600">Active</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button wire:click="closeModal" type="button" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        {{ $loan_scheme_feature_id ? 'Update' : 'Create' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endif
 </div>
