@@ -240,6 +240,11 @@ class Ec08LoanAssignComp extends Component
         $particulars = Ec09LoanAssignParticular::where('loan_assign_id', $id)->get();
         $this->selectedLoanSchemeDetails = $particulars->pluck('loan_scheme_detail_id')->toArray();
         
+        // Load loan scheme details for the selected loan scheme
+        $this->loanSchemeDetails = Ec07LoanSchemeDetail::where('loan_scheme_id', $this->loan_scheme_id)
+            ->where('is_active', true)
+            ->get();
+        
         $this->isModalOpen = true;
     }
 
@@ -267,7 +272,7 @@ class Ec08LoanAssignComp extends Component
     }
 
     // When loan request is selected, auto-populate member, loan scheme, and amount
-    // Also load loan scheme details
+    // Also load loan scheme details and calculate EMI
     public function updatedLoanRequestId()
     {
         if ($this->loan_request_id) {
@@ -282,41 +287,77 @@ class Ec08LoanAssignComp extends Component
                 $this->loanSchemeDetails = Ec07LoanSchemeDetail::where('loan_scheme_id', $this->loan_scheme_id)
                     ->where('is_active', true)
                     ->get();
+                
+                // Auto-calculate EMI when loan request is selected
+                $this->calculateEMI();
             }
         } else {
             // Clear loan scheme details if no loan request is selected
             $this->loanSchemeDetails = [];
+            $this->emi_amount = null;
         }
     }
 
     // Calculate EMI based on principal, interest rate, and time period
     public function calculateEMI()
     {
-        if ($this->loan_amount && $this->loan_scheme_id) {
-            // Get loan scheme details to calculate EMI
-            $loanSchemeDetail = Ec07LoanSchemeDetail::where('loan_scheme_id', $this->loan_scheme_id)
-                ->where('is_active', true)
-                ->first();
-                
-            if ($loanSchemeDetail) {
-                $principal = $this->loan_amount;
-                $annualInterestRate = $loanSchemeDetail->main_interest_rate ?? 0;
-                $months = $loanSchemeDetail->terms_in_month ?? 12;
-                
-                if ($annualInterestRate > 0 && $months > 0) {
-                    // Convert annual interest rate to monthly rate
-                    $monthlyInterestRate = $annualInterestRate / 12 / 100;
-                    
-                    // Calculate EMI using the formula: EMI = P * r * (1+r)^n / ((1+r)^n - 1)
-                    if ($monthlyInterestRate > 0) {
-                        $emi = $principal * $monthlyInterestRate * pow(1 + $monthlyInterestRate, $months) / (pow(1 + $monthlyInterestRate, $months) - 1);
-                        $this->emi_amount = round($emi, 2);
-                    } else {
-                        // If interest rate is 0, simple division
-                        $this->emi_amount = round($principal / $months, 2);
-                    }
-                }
+        // Validate required fields
+        if (!$this->loan_amount || !$this->loan_scheme_id) {
+            $this->emi_amount = null;
+            return;
+        }
+
+        // Get loan scheme details to calculate EMI
+        $loanSchemeDetail = Ec07LoanSchemeDetail::where('loan_scheme_id', $this->loan_scheme_id)
+            ->where('is_active', true)
+            ->first();
+            
+        if (!$loanSchemeDetail) {
+            $this->emi_amount = null;
+            return;
+        }
+
+        $principal = (float) $this->loan_amount;
+        $annualInterestRate = (float) ($loanSchemeDetail->main_interest_rate ?? 0);
+        
+        // Calculate loan term in months based on start and end dates
+        $months = 12; // Default to 12 months
+        if ($this->start_date && $this->end_date) {
+            try {
+                $startDate = \Carbon\Carbon::parse($this->start_date);
+                $endDate = \Carbon\Carbon::parse($this->end_date);
+                $months = $startDate->diffInMonths($endDate);
+                // Ensure minimum of 1 month
+                $months = max(1, $months);
+            } catch (\Exception $e) {
+                // If date parsing fails, use default 12 months
+                $months = 12;
             }
+        }
+
+        // If we have a loan request, use its time period as fallback
+        if ($months == 12 && $this->loan_request_id) {
+            $loanRequest = Ec08LoanRequest::find($this->loan_request_id);
+            if ($loanRequest && $loanRequest->time_period_months) {
+                $months = $loanRequest->time_period_months;
+            }
+        }
+        
+        if ($annualInterestRate > 0 && $months > 0) {
+            // Convert annual interest rate to monthly rate
+            $monthlyInterestRate = $annualInterestRate / 12 / 100;
+            
+            // Calculate EMI using the formula: EMI = P * r * (1+r)^n / ((1+r)^n - 1)
+            if ($monthlyInterestRate > 0) {
+                $emi = $principal * $monthlyInterestRate * pow(1 + $monthlyInterestRate, $months) / (pow(1 + $monthlyInterestRate, $months) - 1);
+                $this->emi_amount = round($emi, 2);
+            } else {
+                // If interest rate is 0, simple division
+                $this->emi_amount = round($principal / $months, 2);
+            }
+        } else {
+            // If no interest rate or terms, set EMI to simple division
+            $this->emi_amount = $months > 0 ? round($principal / $months, 2) : 0;
         }
     }
 
@@ -328,6 +369,24 @@ class Ec08LoanAssignComp extends Component
 
     // Auto-calculate EMI when loan scheme changes
     public function updatedLoanSchemeId()
+    {
+        $this->calculateEMI();
+    }
+    
+    // Auto-calculate EMI when member changes (in case of manual member selection)
+    public function updatedMemberId()
+    {
+        $this->calculateEMI();
+    }
+    
+    // Auto-calculate EMI when start date changes
+    public function updatedStartDate()
+    {
+        $this->calculateEMI();
+    }
+    
+    // Auto-calculate EMI when end date changes
+    public function updatedEndDate()
     {
         $this->calculateEMI();
     }

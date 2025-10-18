@@ -355,10 +355,13 @@
                         @error('emi_amount')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
-                        <button type="button" wire:click="calculateEMI"
-                            class="mt-1 text-xs text-blue-600 hover:text-blue-800">
-                            Calculate EMI
-                        </button>
+                        <div class="mt-1 text-sm text-gray-500">
+                            <span class="block">EMI will be automatically calculated when you select a loan request or update loan details.</span>
+                            <button type="button" wire:click="calculateEMI"
+                                class="mt-1 text-xs text-blue-600 hover:text-blue-800">
+                                Recalculate EMI
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Loan Scheme Details Selection -->
@@ -369,25 +372,66 @@
                             <p class="text-sm text-gray-500 mb-3">Select all applicable loan scheme details:</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 @foreach($loanSchemeDetails as $detail)
-                                <div class="flex items-center pl-3">
-                                    <input type="checkbox" wire:model="selectedLoanSchemeDetails"
-                                        value="{{ $detail->id }}" id="detail_{{ $detail->id }}"
-                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                    <label for="detail_{{ $detail->id }}" class="ml-2 block text-sm text-gray-900">
-                                        {{ $detail->loanSchemeFeature->name ?? 'Feature' }}:
-                                        @if($detail->min_amount)
-                                        Min: ₹{{ number_format($detail->min_amount, 2) }}
-                                        @endif
-                                        @if($detail->max_amount)
-                                        Max: ₹{{ number_format($detail->max_amount, 2) }}
-                                        @endif
-                                        @if($detail->main_interest_rate)
-                                        Rate: {{ $detail->main_interest_rate }}%
-                                        @endif
-                                        @if($detail->terms_in_month)
-                                        Term: {{ $detail->terms_in_month }} months
-                                        @endif
-                                    </label>
+                                <div class="flex items-start p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-150">
+                                    <div class="flex items-center h-5 mt-0.5">
+                                        <input type="checkbox" wire:model="selectedLoanSchemeDetails"
+                                            value="{{ $detail->id }}" id="detail_{{ $detail->id }}"
+                                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 flex-1">
+                                        <label for="detail_{{ $detail->id }}" class="font-medium text-gray-900">
+                                            {{ $detail->loanSchemeFeature->name ?? 'Feature' }}
+                                        </label>
+                                        <div class="mt-2 space-y-1">
+                                            @if($detail->min_amount || $detail->max_amount)
+                                            <div class="flex flex-wrap gap-2">
+                                                @if($detail->min_amount)
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Min: ₹{{ number_format($detail->min_amount, 2) }}
+                                                </span>
+                                                @endif
+                                                @if($detail->max_amount)
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Max: ₹{{ number_format($detail->max_amount, 2) }}
+                                                </span>
+                                                @endif
+                                            </div>
+                                            @endif
+                                            
+                                            @if($detail->main_interest_rate || $detail->terms_in_month)
+                                            <div class="flex flex-wrap gap-2">
+                                                @if($detail->main_interest_rate)
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    Rate: {{ $detail->main_interest_rate }}%
+                                                </span>
+                                                @endif
+                                                @if($detail->terms_in_month)
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    Term: {{ $detail->terms_in_month }} months
+                                                </span>
+                                                @endif
+                                            </div>
+                                            @endif
+                                            
+                                            @if($detail->loan_scheme_feature_value)
+                                            <div class="text-xs text-gray-600">
+                                                Value: {{ $detail->loan_scheme_feature_value }}
+                                            </div>
+                                            @endif
+                                            
+                                            @if($detail->is_featured)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                Featured
+                                            </span>
+                                            @endif
+                                            
+                                            @if($detail->is_open)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                                Open
+                                            </span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                                 @endforeach
                             </div>
