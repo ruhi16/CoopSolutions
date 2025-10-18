@@ -70,15 +70,19 @@
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 ID</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Entry Date</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 LS Feature</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 LS Feature Details</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 LS Feature Value</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Featured</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Open</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Calculated</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions</th>
                         </tr>
@@ -88,9 +92,13 @@
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{
                                 $loanSchemeDetail->id }}</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $loanSchemeDetail->created_at ? date('d M Y',
-                                strtotime($loanSchemeDetail->created_at)) : 'N/A' }}
+                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{
+                                $loanSchemeDetail->loanSchemeFeature->name }}</td>
+                            <td class="px-4 py-4 text-sm text-gray-900">
+                                {{ $loanSchemeDetail->loanSchemeFeature->loan_scheme_feature_name }}
+                                <div class="text-xs text-gray-500">
+                                    ({{ $loanSchemeDetail->loanSchemeFeature->loan_scheme_feature_type }})
+                                </div>
                             </td>
                             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                                 @if($loanSchemeDetail->is_active)
@@ -106,15 +114,46 @@
                                 @endif
                             </td>
                             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{
-                                $loanSchemeDetail->loanSchemeFeature->name }}</td>
-                            <td class="px-4 py-4 text-sm text-gray-900">
-                                {{ $loanSchemeDetail->loanSchemeFeature->loan_scheme_feature_name }}
-                                <div class="text-xs text-gray-500">
-                                    ({{ $loanSchemeDetail->loanSchemeFeature->loan_scheme_feature_type }})
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{
                                 $loanSchemeDetail->loan_scheme_feature_value }}</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                @if($loanSchemeDetail->is_featured)
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Yes
+                                </span>
+                                @else
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    No
+                                </span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                @if($loanSchemeDetail->is_open)
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Yes
+                                </span>
+                                @else
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    No
+                                </span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                @if($loanSchemeDetail->is_calculated)
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Yes
+                                </span>
+                                @else
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    No
+                                </span>
+                                @endif
+                            </td>
                             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 <button wire:click="editLoanSchemeDetail({{ $loanSchemeDetail->id }})"
                                     class="text-blue-600 hover:text-blue-900 mr-2">
@@ -217,6 +256,27 @@
                         @error('selectedLoanSchemeFeatureValue')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                         @enderror
+                    </div>
+                </div>
+
+                <!-- Checkboxes for is_featured, is_open, and is_calculated -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="flex items-center">
+                        <input wire:model="isFeatured" type="checkbox" id="isFeatured"
+                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <label for="isFeatured" class="ml-2 block text-sm text-gray-700">Featured</label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input wire:model="isOpen" type="checkbox" id="isOpen"
+                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <label for="isOpen" class="ml-2 block text-sm text-gray-700">Open to Member</label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input wire:model="isCalculated" type="checkbox" id="isCalculated"
+                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <label for="isCalculated" class="ml-2 block text-sm text-gray-700">Calculated</label>
                     </div>
                 </div>
 

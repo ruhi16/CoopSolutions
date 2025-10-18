@@ -18,7 +18,7 @@ class CreateEc07LoanSchemeDetailsTable extends Migration
             $table->integer('loan_scheme_id');
 
             $table->integer('loan_scheme_feature_id')->nullable();
-            $table->integer('loan_scheme_feature_standard_id')->nullable();
+            // $table->integer('loan_scheme_feature_standard_id')->nullable();
             $table->string('loan_scheme_feature_value')->nullable();
 
             $table->boolean('is_featured')->default(false);

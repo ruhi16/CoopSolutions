@@ -263,8 +263,8 @@
         @elseif($activeMenu == 'bankLoanSchema')
             @livewire('ec21-bank-loan-specification')
 
-        @elseif($activeMenu == 'loanRequest')
-            @livewire('ec08-member-loan-request-comp')
+        {{-- @elseif($activeMenu == 'loanRequest')
+            @livewire('ec08-member-loan-request-comp') --}}
 
             
         @endif

@@ -103,7 +103,7 @@ class Ec001MainLayout extends Component{
                     'component' => 'ec07-loan-scheme-feature-comp'
                 ],
                 'loanrequest' => [
-                    'label' => 'Loan Applications',
+                    'label' => 'Loan Requests',
                     'icon' => 'fas fa-file-alt',
                     'name' => 'loanrequest',
                     'component' => 'ec08-loan-request-comp'
