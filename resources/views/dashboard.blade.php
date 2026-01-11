@@ -19,7 +19,7 @@
         @livewire('ec001-main-layout')
         {{-- @livewire('ec01-organisation') --}}
 
-    {{-- </div> --}}
+    {{-- </div> --}} 
 
     {{-- Hello --}}
 </x-app-layout>

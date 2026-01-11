@@ -52,4 +52,12 @@ class Ec08LoanAssign extends Model
     {
         return $this->hasMany(Ec09LoanAssignParticular::class, 'loan_assign_id');
     }
+    
+    /**
+     * Get the loan assign schedules for this assignment
+     */
+    public function loanAssignSchedules(): HasMany
+    {
+        return $this->hasMany(Ec08LoanAssignSchedule::class, 'loan_assign_id');
+    }
 }

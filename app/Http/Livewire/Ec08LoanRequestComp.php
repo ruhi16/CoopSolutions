@@ -17,13 +17,15 @@ class Ec08LoanRequestComp extends Component
     // public $selectedLoanSchemeFeatureType = null, $selectedLoanSchemeFeatureName = null, $selectedLoanSchemeFeatureValue = null;
 
     public $showDeleteConfirmModal = false;
+    public $showEmiDetailsModal = false;
     public $loanRequests = null, $selectedLoanRequestId = null;
+    public $selectedLoanRequest = null;
 
     
     public function refresh(){
         $this->members = \App\Models\Ec04Member::all();
         $this->loanSchemes = \App\Models\Ec06LoanScheme::all();
-        $this->loanRequests = \App\Models\Ec08LoanRequest::all();
+        $this->loanRequests = \App\Models\Ec08LoanRequest::with('member', 'loanScheme', 'loanAssign')->get();
 
         $this->selectedLoanRequestId = null;
             
@@ -101,6 +103,24 @@ class Ec08LoanRequestComp extends Component
         }
     }
 
+    public function showEmiDetails($loanRequestId){
+        $this->selectedLoanRequest = \App\Models\Ec08LoanRequest::with([
+            'member',
+            'loanScheme',
+            'loanAssign' => function($query) {
+                $query->with(['loanAssignSchedules' => function($scheduleQuery) {
+                    $scheduleQuery->orderBy('payment_schedule_date');
+                }]);
+            }
+        ])->find($loanRequestId);
+        
+        $this->showEmiDetailsModal = true;
+    }
+
+    public function closeEmiDetailsModal(){
+        $this->showEmiDetailsModal = false;
+        $this->selectedLoanRequest = null;
+    }
 
 
     public function saveLoanRequest(){

@@ -47,6 +47,15 @@ class Ec08LoanRequest extends Model
         return $this->belongsTo(Ec06LoanScheme::class,'req_loan_scheme_id','id');
     }
 
+    public function loanAssign(){
+        return $this->hasOne(Ec08LoanAssign::class,'loan_request_id','id');
+    }
+
+    public function getEmiAmountAttribute(){
+        $loanAssign = $this->loanAssign;
+        return $loanAssign ? $loanAssign->emi_amount : 'N/A';
+    }
+
 
 
 }

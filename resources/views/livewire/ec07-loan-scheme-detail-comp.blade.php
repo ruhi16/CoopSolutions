@@ -48,7 +48,8 @@
         }
 
         // Sort each group by ID
-        foreach($groupedDetails as &$details) {
+        // dd($groupedDetails) ;
+        foreach($groupedDetails as $details) {
         usort($details, function($a, $b) {
         return $a->id <=> $b->id;
             });
@@ -59,6 +60,7 @@
             <div class="mb-8">
                 <div class="bg-gray-100 px-4 py-2 rounded-t-lg">
                     <h3 class="text-lg font-semibold text-gray-800">
+                        
                         {{ $details[0]->loanScheme->name ?? 'Unknown Scheme' }}
                         <span class="text-sm font-normal text-gray-600">(Total: {{ count($details) }} items)</span>
                     </h3>
