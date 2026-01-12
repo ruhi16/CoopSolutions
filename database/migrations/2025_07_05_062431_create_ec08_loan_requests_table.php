@@ -20,6 +20,7 @@ class CreateEc08LoanRequestsTable extends Migration
             
             $table->integer('req_loan_scheme_id')->nullable();
             $table->double('req_loan_amount', 10, 2)->nullable();
+            $table->double('req_loan_schema_roi_copy', 10, 2)->nullable();
             $table->integer('time_period_months')->nullable();
             $table->date('req_date')->nullable();
 

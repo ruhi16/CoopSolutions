@@ -9,7 +9,18 @@ class Ec08LoanRequest extends Model
 {
     use HasFactory;
     protected $table = 'ec08_loan_requests';
-    protected $guarded = ['id'];
+    protected $guarded = [];
+    
+    protected $fillable = [
+        'member_id',
+        'organisation_id', 
+        'req_loan_scheme_id',
+        'req_loan_schema_roi_copy',
+        'req_loan_amount',
+        'time_period_months',
+        'req_date',
+        'status'
+    ];
     
     // cast the 'req_date' in datetime
     protected $casts = [
