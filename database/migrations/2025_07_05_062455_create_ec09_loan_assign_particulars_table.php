@@ -19,6 +19,8 @@ class CreateEc09LoanAssignParticularsTable extends Migration
 
             $table->integer('loan_scheme_id')->nullable();
             $table->integer('loan_scheme_detail_id')->nullable();
+            $table->float('loan_scheme_detail_feature_name_copy')->nullable();
+            $table->float('loan_scheme_detail_feature_value_copy')->nullable();
             
             $table->boolean('is_regular')->default(false);  // scheduled = true or regular = null or false
             $table->integer('loan_schedule_id')->nullable();    // when is_regular = false, fine or others, specific to 
