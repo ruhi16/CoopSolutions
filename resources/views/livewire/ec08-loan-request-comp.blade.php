@@ -88,7 +88,15 @@
                         {{ $loanRequest->req_loan_amount ?? 'X' }}
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ $loanRequest->status ?? 'X' }}
+                        @if($loanRequest->isAssigned())
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Assigned
+                            </span>
+                        @else
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                Pending
+                            </span>
+                        @endif
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                         <button wire:click="openModal({{ $loanRequest->id }})"
@@ -341,7 +349,17 @@
                     </div>
                     <div class="bg-blue-50 p-3 rounded">
                         <p class="text-sm text-gray-600">Status</p>
-                        <p class="font-medium">{{ $selectedLoanRequest->status ?? 'N/A' }}</p>
+                        <p class="font-medium">
+                            @if($selectedLoanRequest->isAssigned())
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Assigned
+                                </span>
+                            @else
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    Pending
+                                </span>
+                            @endif
+                        </p>
                     </div>
                 </div>
             </div>

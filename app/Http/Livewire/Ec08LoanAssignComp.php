@@ -84,10 +84,11 @@ class Ec08LoanAssignComp extends Component
             ->where('is_active', true)
             ->get();
             
-        // Load ALL active loan requests for the organization
+        // Load ALL active loan requests for the organization that are not yet assigned
         $this->allLoanRequests = Ec08LoanRequest::with('member', 'loanScheme')
             ->where('organisation_id', $this->organisation_id)
             ->where('is_active', true)
+            ->whereDoesntHave('loanAssign') // Only show requests that haven't been assigned yet
             ->get();
             
         // Load active loan schemes
@@ -232,6 +233,22 @@ class Ec08LoanAssignComp extends Component
                     'done_by' => Auth::id() ?? 1, // Use current user ID or default to 1
                 ]);
             }
+            
+            // Create a mock entry in Ec11LoanPayment for future calculations
+            \App\Models\Ec11LoanPayment::create([
+                'loan_assign_id' => $loanAssign->id,
+                'member_id' => $loanAssign->member_id, // Link to the member
+                'payment_schedule_id' => null, // Initially no specific schedule
+                'payment_total_amount' => 0, // All numeric values as 0
+                'payment_principal_amount' => 0,
+                'regular_amount_total' => 0,
+                'scheduled_amount_total' => 0,
+                'principal_balance_amount' => $loanAssign->loan_amount, // Set initial balance to loan amount
+                'payment_date' => now(),
+                'is_paid' => false,
+                'is_active' => true,
+                'remarks' => 'starting mock entry',
+            ]);
             
             session()->flash('message', 'Loan assignment created successfully.');
         }
