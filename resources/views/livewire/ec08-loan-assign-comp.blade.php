@@ -361,6 +361,28 @@
                                 class="mt-1 text-xs text-blue-600 hover:text-blue-800">
                                 Recalculate EMI
                             </button>
+                            @if($loan_scheme_id)
+                                @php
+                                    $loanSchemeDetail = App\Models\Ec07LoanSchemeDetail::where('loan_scheme_id', $loan_scheme_id)
+                                        ->where('is_active', true)
+                                        ->where('loan_scheme_feature_id', 1)
+                                        ->first();
+                                    if (!$loanSchemeDetail) {
+                                        $roiFeature = App\Models\Ec07LoanSchemeFeature::where(function($query) {
+                                            $query->where('id', 1)->orWhere('name', 'like', '%roi%');
+                                        })->first();
+                                        if ($roiFeature) {
+                                            $loanSchemeDetail = App\Models\Ec07LoanSchemeDetail::where('loan_scheme_id', $loan_scheme_id)
+                                                ->where('is_active', true)
+                                                ->where('loan_scheme_feature_id', $roiFeature->id)
+                                                ->first();
+                                        }
+                                    }
+                                @endphp
+                                @if($loanSchemeDetail)
+                                    <p class="mt-1 text-xs text-green-600">Interest Rate: {{ $loanSchemeDetail->loan_scheme_feature_value ?? 0 }}% ({{ $loanSchemeDetail->loanSchemeFeature->name ?? 'ROI' }})</p>
+                                @endif
+                            @endif
                         </div>
                     </div>
 
@@ -463,6 +485,65 @@
                             </label>
                         </div>
                     </div>
+
+                    <!-- EMI Schedule Table -->
+                    @if(!empty($emiSchedule))
+                    <div class="md:col-span-2 mt-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-3">EMI Schedule</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-200 rounded-lg">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Installment #</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Principal</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interest</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Payment</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 bg-white">
+                                    @foreach($emiSchedule as $schedule)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{{ $schedule['payment_number'] }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{{ \Carbon\Carbon::parse($schedule['payment_date'])->format('d-M-Y') }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">₹{{ number_format($schedule['principal'], 2) }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">₹{{ number_format($schedule['interest'], 2) }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">₹{{ number_format($schedule['total_payment'], 2) }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">₹{{ number_format($schedule['balance'], 2) }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-2 flex flex-wrap gap-4 text-sm text-gray-500">
+                            <p>Total Installments: {{ count($emiSchedule) }}</p>
+                            @if($loan_scheme_id)
+                                @php
+                                    $loanSchemeDetail = App\Models\Ec07LoanSchemeDetail::where('loan_scheme_id', $loan_scheme_id)
+                                        ->where('is_active', true)
+                                        ->where('loan_scheme_feature_id', 1)
+                                        ->first();
+                                    if (!$loanSchemeDetail) {
+                                        $roiFeature = App\Models\Ec07LoanSchemeFeature::where(function($query) {
+                                            $query->where('id', 1)->orWhere('name', 'like', '%roi%');
+                                        })->first();
+                                        if ($roiFeature) {
+                                            $loanSchemeDetail = App\Models\Ec07LoanSchemeDetail::where('loan_scheme_id', $loan_scheme_id)
+                                                ->where('is_active', true)
+                                                ->where('loan_scheme_feature_id', $roiFeature->id)
+                                                ->first();
+                                        }
+                                    }
+                                @endphp
+                                @if($loanSchemeDetail)
+                                    <p>Interest Rate: {{ $loanSchemeDetail->loan_scheme_feature_value ?? 0 }}%</p>
+                                    <p>Feature: {{ $loanSchemeDetail->loanSchemeFeature->name ?? 'ROI' }}</p>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+                    @endif
                 </div>
 
                 <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">

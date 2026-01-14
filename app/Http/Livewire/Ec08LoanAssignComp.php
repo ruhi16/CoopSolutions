@@ -11,6 +11,7 @@ use App\Models\Ec04Member;
 use App\Models\Ec06LoanScheme;
 use App\Models\Ec07LoanSchemeDetail;
 use App\Models\Ec01Organisation;
+use App\Models\Ec10LoanAssignSchedule;
 use Illuminate\Support\Facades\Auth;
 
 class Ec08LoanAssignComp extends Component
@@ -33,6 +34,9 @@ class Ec08LoanAssignComp extends Component
     // Additional fields for loan scheme details
     public $selectedLoanSchemeDetails = []; // For storing selected loan scheme details
     public $loanSchemeDetails = []; // For storing available loan scheme details
+
+    // EMI Schedule
+    public $emiSchedule = [];
 
     // UI state
     public $isModalOpen = false;
@@ -202,6 +206,24 @@ class Ec08LoanAssignComp extends Component
                 ]);
             }
             
+            // Create EMI schedule records
+            foreach ($this->emiSchedule as $index => $schedule) {
+                Ec10LoanAssignSchedule::create([
+                    'loan_assign_id' => $loanAssign->id,
+                    'payment_schedule_no' => $schedule['payment_number'],
+                    'payment_schedule_date' => $schedule['payment_date'],
+                    'payment_schedule_status' => 'pending',
+                    'payment_schedule_balance_amount_copy' => $schedule['balance'],
+                    'payment_schedule_total_amount' => $schedule['total_payment'],
+                    'payment_schedule_principal' => $schedule['principal'],
+                    'payment_schedule_interest' => $schedule['interest'],
+                    'payment_schedule_others' => 0, // No other charges initially
+                    'is_paid' => false,
+                    'is_active' => true,
+                    'remarks' => "EMI Payment #{$schedule['payment_number']}",
+                ]);
+            }
+            
             // Update the loan request to set is_active to false and done_by to user_id
             $loanRequest = Ec08LoanRequest::find($this->loan_request_id);
             if ($loanRequest) {
@@ -304,21 +326,38 @@ class Ec08LoanAssignComp extends Component
         // Validate required fields
         if (!$this->loan_amount || !$this->loan_scheme_id) {
             $this->emi_amount = null;
+            $this->emiSchedule = [];
             return;
         }
 
-        // Get loan scheme details to calculate EMI
+        // Get loan scheme details that have ROI feature (where loan_scheme_feature_id = 1)
         $loanSchemeDetail = Ec07LoanSchemeDetail::where('loan_scheme_id', $this->loan_scheme_id)
             ->where('is_active', true)
+            ->where('loan_scheme_feature_id', 1) // ROI feature ID
             ->first();
             
+        // Fallback: Look for feature with name 'roi' if feature id 1 doesn't exist
+        if (!$loanSchemeDetail) {
+            $roiFeature = Ec07LoanSchemeFeature::where(function($query) {
+                $query->where('id', 1)->orWhere('name', 'like', '%roi%');
+            })->first();
+            
+            if ($roiFeature) {
+                $loanSchemeDetail = Ec07LoanSchemeDetail::where('loan_scheme_id', $this->loan_scheme_id)
+                    ->where('is_active', true)
+                    ->where('loan_scheme_feature_id', $roiFeature->id)
+                    ->first();
+            }
+        }
+        
         if (!$loanSchemeDetail) {
             $this->emi_amount = null;
+            $this->emiSchedule = [];
             return;
         }
 
         $principal = (float) $this->loan_amount;
-        $annualInterestRate = (float) ($loanSchemeDetail->main_interest_rate ?? 0);
+        $annualInterestRate = (float) ($loanSchemeDetail->loan_scheme_feature_value ?? 0);
         
         // Calculate loan term in months based on start and end dates
         $months = 12; // Default to 12 months
@@ -358,6 +397,68 @@ class Ec08LoanAssignComp extends Component
         } else {
             // If no interest rate or terms, set EMI to simple division
             $this->emi_amount = $months > 0 ? round($principal / $months, 2) : 0;
+        }
+        
+        // Generate EMI schedule
+        $this->generateEMISchedule($principal, $annualInterestRate, $months);
+    }
+    
+    // Generate EMI schedule table
+    private function generateEMISchedule($principal, $annualInterestRate, $months)
+    {
+        $this->emiSchedule = [];
+        
+        if ($months <= 0) {
+            return;
+        }
+        
+        $monthlyInterestRate = $annualInterestRate / 12 / 100;
+        $remainingBalance = $principal;
+        $monthlyPayment = $this->emi_amount;
+        $currentDate = \Carbon\Carbon::parse($this->start_date);
+        
+        for ($i = 1; $i <= $months; $i++) {
+            // Calculate interest for current month
+            $interestPayment = $remainingBalance * $monthlyInterestRate;
+            
+            // Calculate principal payment
+            $principalPayment = min($monthlyPayment, $remainingBalance); // Last payment might be less
+            
+            // Adjust principal payment if needed to avoid overpayment
+            if ($principalPayment + $interestPayment > $monthlyPayment) {
+                $principalPayment = $monthlyPayment - $interestPayment;
+            }
+            
+            // Update remaining balance
+            $remainingBalance -= $principalPayment;
+            
+            // Handle final payment to ensure balance reaches zero
+            if ($i == $months) {
+                $principalPayment = max($remainingBalance + $principalPayment, 0);
+                $remainingBalance = 0;
+            }
+            
+            // Calculate the payment date (same day of month as emi_payment_date)
+            $paymentDate = \Carbon\Carbon::createFromDate($currentDate->year, $currentDate->month, min($this->emi_payment_date, $currentDate->daysInMonth));
+            
+            // If the payment date is in the past, move to next month
+            if ($paymentDate->lessThan($currentDate) && $i > 1) {
+                $paymentDate = $paymentDate->addMonth();
+                $paymentDate = \Carbon\Carbon::createFromDate($paymentDate->year, $paymentDate->month, min($this->emi_payment_date, $paymentDate->daysInMonth));
+            }
+            
+            // Add schedule entry
+            $this->emiSchedule[] = [
+                'payment_number' => $i,
+                'payment_date' => $paymentDate->format('Y-m-d'),
+                'principal' => round($principalPayment, 2),
+                'interest' => round($interestPayment, 2),
+                'total_payment' => round($principalPayment + $interestPayment, 2),
+                'balance' => max(round($remainingBalance, 2), 0),
+            ];
+            
+            // Move to next month for next iteration
+            $currentDate = $currentDate->addMonth();
         }
     }
 
