@@ -10,6 +10,7 @@ class Wf03TaskEvent extends Model
     use HasFactory;
     protected $table = 'wf03_task_events';
     protected $guarded = ['id'];
+    
     protected $fillable = [
         'name',
         'description',

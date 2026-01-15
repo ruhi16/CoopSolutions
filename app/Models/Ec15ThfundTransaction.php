@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Ec15ThfundTransaction extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
 }

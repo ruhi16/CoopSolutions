@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Tb01Operation extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
 }

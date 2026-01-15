@@ -9,6 +9,8 @@ class Wf04TaskEventStep extends Model
 {
     use HasFactory;
     protected $table = 'wf04_task_event_steps';
+    protected $primaryKey = 'id';
+    protected $guarded = ['id'];
 
     protected $fillable = [
         'name',

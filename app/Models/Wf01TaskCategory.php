@@ -9,6 +9,7 @@ class Wf01TaskCategory extends Model
 {
     use HasFactory;
     protected $table = 'wf01_task_categories';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'name',

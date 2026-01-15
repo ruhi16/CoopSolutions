@@ -9,18 +9,9 @@ class Ec10LoanAssignSchedule extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    
     protected $table = 'ec10_loan_assign_schedules';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    protected $guarded = ['id'];
     protected $fillable = [
         'loan_assign_id',
         'payment_schedule_no',
