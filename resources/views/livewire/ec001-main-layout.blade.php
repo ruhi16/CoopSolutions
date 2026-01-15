@@ -310,7 +310,7 @@
                     
                 {{-- Fund Management Components --}}
                 @elseif($activeMenu == 'thriftFund')
-                    @livewire('ec15-thfund-comp')
+                    @livewire('ec15-thfund-dashboard-comp')
                 @elseif($activeMenu == 'shareFundMember')
                     @livewire('ec16-shfund-member-comp')
                 @elseif($activeMenu == 'shareFundBank')

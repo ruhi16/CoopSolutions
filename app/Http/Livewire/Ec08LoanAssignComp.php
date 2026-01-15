@@ -10,6 +10,7 @@ use App\Models\Ec08LoanRequest;
 use App\Models\Ec04Member;
 use App\Models\Ec06LoanScheme;
 use App\Models\Ec07LoanSchemeDetail;
+use App\Models\Ec07LoanSchemeFeature;
 use App\Models\Ec01Organisation;
 use App\Models\Ec10LoanAssignSchedule;
 use Illuminate\Support\Facades\Auth;
@@ -234,7 +235,7 @@ class Ec08LoanAssignComp extends Component
                 ]);
             }
             
-            // Create a mock entry in Ec11LoanPayment for future calculations
+            // Create a mock entry in Ec11LoanPayment for future reference to find the loan date
             \App\Models\Ec11LoanPayment::create([
                 'loan_assign_id' => $loanAssign->id,
                 'member_id' => $loanAssign->member_id, // Link to the member
@@ -247,7 +248,7 @@ class Ec08LoanAssignComp extends Component
                 'payment_date' => now(),
                 'is_paid' => false,
                 'is_active' => true,
-                'remarks' => 'starting mock entry',
+                'remarks' => 'New loan issued',
             ]);
             
             session()->flash('message', 'Loan assignment created successfully.');

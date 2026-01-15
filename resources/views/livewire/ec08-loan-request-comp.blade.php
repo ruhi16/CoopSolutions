@@ -78,7 +78,7 @@
                         {{ $loanRequest->req_loan_schema_roi_copy ?? 'X' }}%
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ (int) $loanRequest->time_period_months/12 ?? 'X' }} Years
+                        {{ (int) $loanRequest->time_period_months / 12 ?? 'X' }} Years
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                         {{ $loanRequest->req_date ?? 'X' }}
@@ -88,12 +88,14 @@
                         {{ $loanRequest->req_loan_amount ?? 'X' }}
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                        @if($loanRequest->isAssigned())
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        @if($loanRequest && $loanRequest->isAssigned())
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                 Assigned
                             </span>
                         @else
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                 Pending
                             </span>
                         @endif
@@ -323,16 +325,17 @@
     {{-- End of Delete Confirmation Modal --}}
 
     <!-- EMI Details Modal -->
-    <div id="emiDetailsModal" 
+    <div id="emiDetailsModal"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showEmiDetailsModal ? 'block' : 'hidden' }}">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl mx-4 max-h-90vh overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold text-gray-900">EMI Details for <span class="text-blue-700">{{ $selectedLoanRequest->member->name ?? 'N/A' }}</span></h2>
+                <h2 class="text-xl font-bold text-gray-900">EMI Details for <span
+                        class="text-blue-700">{{ $selectedLoanRequest->member->name ?? 'N/A' }}</span></h2>
                 <button wire:click="closeEmiDetailsModal" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <div class="mb-4">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div class="bg-blue-50 p-3 rounded">
@@ -350,12 +353,14 @@
                     <div class="bg-blue-50 p-3 rounded">
                         <p class="text-sm text-gray-600">Status</p>
                         <p class="font-medium">
-                            @if($selectedLoanRequest->isAssigned())
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            @if($selectedLoanRequest && $selectedLoanRequest->isAssigned())
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     Assigned
                                 </span>
                             @else
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                     Pending
                                 </span>
                             @endif
@@ -363,7 +368,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="relative overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -378,18 +383,18 @@
                     <tbody>
                         @if(isset($selectedLoanRequest->emiDetails) && count($selectedLoanRequest->emiDetails) > 0)
                             @foreach($selectedLoanRequest->emiDetails as $detail)
-                            <tr class="bg-white border-b hover:bg-gray-50">
-                                <td class="px-4 py-3 font-medium text-gray-900">{{ $detail['emi_sl'] }}</td>
-                                <td class="px-4 py-3">{{ number_format($detail['principal']+$detail['interest'], 2) }}</td>
-                                <td class="px-4 py-3">{{ $detail['principal'] }}</td>
-                                <td class="px-4 py-3">{{ $detail['interest'] }}</td>
-                                <td class="px-4 py-3">{{ $detail['total_remaining_principal'] }}</td>
-                            </tr>
+                                <tr class="bg-white border-b hover:bg-gray-50">
+                                    <td class="px-4 py-3 font-medium text-gray-900">{{ $detail['emi_sl'] }}</td>
+                                    <td class="px-4 py-3">{{ number_format($detail['principal'] + $detail['interest'], 2) }}</td>
+                                    <td class="px-4 py-3">{{ $detail['principal'] }}</td>
+                                    <td class="px-4 py-3">{{ $detail['interest'] }}</td>
+                                    <td class="px-4 py-3">{{ $detail['total_remaining_principal'] }}</td>
+                                </tr>
                             @endforeach
                         @else
-                        <tr>
-                            <td colspan="4" class="px-4 py-3 text-center text-gray-500">No EMI details available</td>
-                        </tr>
+                            <tr>
+                                <td colspan="4" class="px-4 py-3 text-center text-gray-500">No EMI details available</td>
+                            </tr>
                         @endif
                     </tbody>
                 </table>
