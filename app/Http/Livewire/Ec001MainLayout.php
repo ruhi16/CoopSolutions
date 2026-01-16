@@ -138,7 +138,7 @@ class Ec001MainLayout extends Component{
                     'label' => 'Bank Share Fund',
                     'icon' => 'fas fa-university',
                     'name' => 'shareFundBank',
-                    'component' => 'ec17-shfund-bank-comp'
+                    'component' => 'ec17-shfund-bank-dashboard-comp'
                 ],
             ],
         ],

@@ -337,7 +337,8 @@
                     @elseif($activeMenu == 'shareFundMember')
                         @livewire('ec16-shfund-member-dashboard-comp')
                     @elseif($activeMenu == 'shareFundBank')
-                        @livewire('ec17-shfund-bank-comp')
+                        {{-- @livewire('ec17-shfund-bank-comp') --}}
+                        @livewire('ec17-shfund-bank-dashboard-comp')
 
                         {{-- Banking Operations Components --}}
                     @elseif($activeMenu == 'bankDetails')
