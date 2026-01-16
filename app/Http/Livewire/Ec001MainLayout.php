@@ -132,7 +132,7 @@ class Ec001MainLayout extends Component{
                     'label' => 'Member Share Fund',
                     'icon' => 'fas fa-share-alt',
                     'name' => 'shareFundMember',
-                    'component' => 'ec16-shfund-member-comp'
+                    'component' => 'ec16-shfund-member-dashboard-comp'
                 ],
                 'shareFundBank' => [
                     'label' => 'Bank Share Fund',

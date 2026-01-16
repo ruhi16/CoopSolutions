@@ -335,7 +335,7 @@
                     @elseif($activeMenu == 'thriftFund')
                         @livewire('ec15-thfund-dashboard-comp')
                     @elseif($activeMenu == 'shareFundMember')
-                        @livewire('ec16-shfund-member-comp')
+                        @livewire('ec16-shfund-member-dashboard-comp')
                     @elseif($activeMenu == 'shareFundBank')
                         @livewire('ec17-shfund-bank-comp')
 
