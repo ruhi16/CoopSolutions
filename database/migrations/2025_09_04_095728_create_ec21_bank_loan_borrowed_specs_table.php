@@ -23,8 +23,8 @@ class CreateEc21BankLoanBorrowedSpecsTable extends Migration
             // $table->integer('bank_loanscheme_specification_id')->nullable();
             // $table->string('bank_loanscheme_specification_detail')->nullable();
 
-            $table->string('bank_loan_schema_particular_id')->nullable();   
-            $table->double('bank_loan_schema_particular_value', 10, 2)->nullable();
+            $table->string('bank_loan_scheme_particular_id')->nullable();   
+            $table->double('bank_loan_scheme_particular_value', 10, 2)->nullable();
             $table->boolean('is_percent_on_current_balance')->default(true);        // otherwise: fixed_value
 
             $table->boolean('is_regular')->default(false);  // for each month, otherwise: special or for one month only

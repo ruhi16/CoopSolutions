@@ -13,7 +13,22 @@ class Ec21BankLoanBorrowed extends Model
     protected $guarded = ['id'];
     protected $table = 'ec21_bank_loan_borroweds';
     
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::deleting(function ($model) {
+            // Delete related specifications when the main record is deleted
+            $model->specifications()->delete();
+        });
+    }
+    
     public function loanScheme(): BelongsTo
+    {
+        return $this->belongsTo(Ec21BankLoanScheme::class, 'bank_loan_scheme_particular_id');
+    }
+    
+    public function loanSchemeDetail(): BelongsTo
     {
         return $this->belongsTo(Ec21BankLoanScheme::class, 'bank_loan_scheme_particular_id');
     }

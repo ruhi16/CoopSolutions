@@ -90,6 +90,66 @@
                                 </button>
                             </td>
                         </tr>
+                        <!-- Expandable row for specifications -->
+                        @if(isset($expandedLoanId) && $expandedLoanId == $loan->id)
+                        <tr class="bg-gray-50">
+                            <td colspan="8" class="px-6 py-4">
+                                <div class="mb-4">
+                                    <h4 class="text-md font-semibold text-gray-700 mb-2">Specifications:</h4>
+                                    @if($loan->specifications->count() > 0)
+                                        <div class="border rounded-lg overflow-hidden">
+                                            <table class="min-w-full divide-y divide-gray-200">
+                                                <thead class="bg-gray-100">
+                                                    <tr>
+                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Particular</th>
+                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Is Regular</th>
+                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Effected On</th>
+                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="bg-white divide-y divide-gray-200">
+                                                    @foreach($loan->specifications as $spec)
+                                                    <tr>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->particular->name ?? 'N/A' }}</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->bank_loan_schema_particular_value }}</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                                {{ $spec->is_regular ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                                {{ $spec->is_regular ? 'Yes' : 'No' }}
+                                                            </span>
+                                                        </td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->effected_on ? date('d M Y', strtotime($spec->effected_on)) : 'N/A' }}</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                                {{ $spec->status === 'active' ? 'bg-green-100 text-green-800' : 
+                                                                   ($spec->status === 'inactive' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800') }}">
+                                                                {{ ucfirst($spec->status) }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @else
+                                        <p class="text-gray-500 italic">No specifications assigned</p>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                        @endif
+                        <tr>
+                            <td colspan="8" class="px-6 py-2 bg-gray-50">
+                                <button 
+                                    wire:click="toggleSpecifications({{ $loan->id }})"
+                                    class="text-sm text-blue-600 hover:text-blue-800 flex items-center"
+                                >
+                                    <i class="fas fa-chevron-down mr-1 {{ isset($expandedLoanId) && $expandedLoanId == $loan->id ? 'transform rotate-180' : '' }}"></i>
+                                    <span>{{ isset($expandedLoanId) && $expandedLoanId == $loan->id ? 'Hide Specifications' : 'Show Specifications' }}</span>
+                                </button>
+                            </td>
+                        </tr>
                     @empty
                         <tr>
                             <td colspan="8" class="px-6 py-4 text-center text-gray-500">
@@ -118,6 +178,11 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                    @if(session()->has('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
                     
                     <form wire:submit.prevent="saveBorrowedLoan" class="mt-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

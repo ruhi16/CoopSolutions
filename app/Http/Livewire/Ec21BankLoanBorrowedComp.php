@@ -33,6 +33,7 @@ class Ec21BankLoanBorrowedComp extends Component
     public $showBorrowedLoanModal = false;
     public $showDeleteConfirmModal = false;
     public $deleteConfirmId = null;
+    public $expandedLoanId = null;
     
     public $schemeSpecifications = [];
     
@@ -43,8 +44,8 @@ class Ec21BankLoanBorrowedComp extends Component
     }
 
     public function refresh(){
-        $this->borrowedLoans = Ec21BankLoanBorrowed::with(['loanScheme'])->get();
-        $this->loanSchemes = Ec21BankLoanScheme::with(['bank', 'specifications'])->get();
+        $this->borrowedLoans = Ec21BankLoanBorrowed::with(['loanScheme', 'specifications.particular'])->get();
+        $this->loanSchemes = Ec21BankLoanScheme::with(['bank', 'specifications.particular'])->get();
         
         $this->resetForm();
     }
@@ -69,7 +70,7 @@ class Ec21BankLoanBorrowedComp extends Component
 
     public function openModal($borrowedLoanId = null){
         if($borrowedLoanId){
-            $borrowedLoan = Ec21BankLoanBorrowed::with(['loanScheme.specifications'])->find($borrowedLoanId);
+            $borrowedLoan = Ec21BankLoanBorrowed::with(['loanScheme.specifications', 'specifications'])->find($borrowedLoanId);
             $this->borrowedLoanId = $borrowedLoan->id;
             $this->name = $borrowedLoan->name;
             $this->description = $borrowedLoan->description;
@@ -88,6 +89,9 @@ class Ec21BankLoanBorrowedComp extends Component
             if($this->selectedSchemeId) {
                 $this->loadSchemeSpecifications($this->selectedSchemeId);
             }
+            
+            // Load existing specifications for this borrowed loan
+            $this->selectedSpecifications = $borrowedLoan->specifications->pluck('bank_loan_scheme_specification_id')->toArray();
         } else {
             $this->resetForm();
         }
@@ -102,7 +106,7 @@ class Ec21BankLoanBorrowedComp extends Component
 
     public function loadSchemeSpecifications($schemeId = null){
         if($schemeId){
-            $loanScheme = Ec21BankLoanScheme::with('specifications.particular')->find($schemeId);
+            $loanScheme = Ec21BankLoanScheme::with(['specifications.particular'])->find($schemeId);
             if($loanScheme) {
                 $this->selectedSchemeId = $schemeId;
                 $this->schemeSpecifications = $loanScheme->specifications;
@@ -130,6 +134,16 @@ class Ec21BankLoanBorrowedComp extends Component
         } else {
             // Add to array if not selected
             $this->selectedSpecifications[] = $specId;
+        }
+    }
+    
+    public function toggleSpecifications($loanId){
+        if($this->expandedLoanId == $loanId){
+            // Close if already expanded
+            $this->expandedLoanId = null;
+        } else {
+            // Expand the clicked loan
+            $this->expandedLoanId = $loanId;
         }
     }
 
@@ -163,6 +177,33 @@ class Ec21BankLoanBorrowedComp extends Component
                 'remarks' => $this->remarks,
             ]);
 
+            // Now assign the selected specifications to the borrowed loan
+            if ($this->selectedSpecifications) {
+                // First, delete existing specifications for this borrowed loan
+                $borrowedLoan->specifications()->delete();
+
+                // Then add the selected specifications with their corresponding values
+                foreach ($this->selectedSpecifications as $specId) {
+                    $specification = Ec21BankLoanSchemeSpecification::with('particular')->find($specId);
+                    if ($specification) {
+                        $borrowedLoan->specifications()->create([
+                            'bank_loan_scheme_specification_id' => $specification->id,
+                            'bank_loan_schema_particular_id' => $specification->bank_loan_schema_particular_id,
+                            'bank_loan_schema_particular_value' => $specification->bank_loan_schema_particular_value,
+                            'is_percent_on_current_balance' => $specification->is_percent_on_current_balance,
+                            'is_regular' => $specification->is_regular,
+                            'effected_on' => $specification->effected_on,
+                            'status' => $specification->status,
+                            'organisation_id' => $specification->organisation_id,
+                            'user_id' => $specification->user_id,
+                            'financial_year_id' => $specification->financial_year_id,
+                            'is_active' => $specification->is_active,
+                            'remarks' => $specification->remarks,
+                        ]);
+                    }
+                }
+            }
+
             $this->closeModal();
             $this->refresh();
             session()->flash('success', 'Bank Loan Borrowed ' . ($this->borrowedLoanId ? 'Updated' : 'Created') . ' Successfully');
@@ -184,7 +225,13 @@ class Ec21BankLoanBorrowedComp extends Component
     public function deleteBorrowedLoan(){
         if($this->deleteConfirmId){
             try{
-                $borrowedLoan = Ec21BankLoanBorrowed::find($this->deleteConfirmId);
+                $borrowedLoan = Ec21BankLoanBorrowed::with('specifications')->find($this->deleteConfirmId);
+                
+                // Delete related specifications first
+                if($borrowedLoan && $borrowedLoan->specifications) {
+                    $borrowedLoan->specifications()->delete();
+                }
+                
                 $borrowedLoan->delete();
 
                 $this->refresh();
