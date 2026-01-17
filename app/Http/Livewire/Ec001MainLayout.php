@@ -123,7 +123,7 @@ class Ec001MainLayout extends Component{
             'role' => 'admin,manager,officer',
             'submenus' => [
                 'thriftFund' => [
-                    'label' => 'Thrift Fund Dashboard',
+                    'label' => 'Th Fund Dashboard',
                     'icon' => 'fas fa-coins',
                     'name' => 'thriftFund',
                     'component' => 'ec15-thfund-dashboard-comp'
