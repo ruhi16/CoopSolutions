@@ -85,13 +85,22 @@ class Ec21BankLoanBorrowedComp extends Component
             $this->isActive = $borrowedLoan->is_active;
             $this->remarks = $borrowedLoan->remarks;
             
+            // Load existing specifications for this borrowed loan first
+            $this->selectedSpecifications = $borrowedLoan->specifications->pluck('bank_loan_scheme_specification_id')->toArray();
+            
             // Load loan scheme specifications if loan scheme is selected
             if($this->selectedSchemeId) {
+                // First load the scheme specifications
                 $this->loadSchemeSpecifications($this->selectedSchemeId);
+                
+                // Make sure the saved specifications remain selected
+                $savedSpecIds = $borrowedLoan->specifications->pluck('bank_loan_scheme_specification_id')->toArray();
+                foreach($savedSpecIds as $specId) {
+                    if(!in_array($specId, $this->selectedSpecifications)) {
+                        $this->selectedSpecifications[] = $specId;
+                    }
+                }
             }
-            
-            // Load existing specifications for this borrowed loan
-            $this->selectedSpecifications = $borrowedLoan->specifications->pluck('bank_loan_scheme_specification_id')->toArray();
         } else {
             $this->resetForm();
         }
@@ -111,12 +120,15 @@ class Ec21BankLoanBorrowedComp extends Component
                 $this->selectedSchemeId = $schemeId;
                 $this->schemeSpecifications = $loanScheme->specifications;
                 
-                // Reset selected specifications array
+                // Pre-select mandatory specifications (non-regular = mandatory) and any previously selected specifications
+                $previouslySelected = $this->selectedSpecifications; // Preserve any previously selected specs
+                
+                // Reset selected specifications array but preserve previously selected ones
                 $this->selectedSpecifications = [];
                 
-                // Pre-select mandatory specifications (non-regular = mandatory)
+                // Add back the previously selected specifications that belong to this loan scheme
                 foreach($this->schemeSpecifications as $spec) {
-                    if(!$spec->is_regular) { // Mandatory specifications
+                    if(in_array($spec->id, $previouslySelected) || !$spec->is_regular) { // Mandatory specs or previously selected
                         $this->selectedSpecifications[] = $spec->id;
                     }
                 }
@@ -178,11 +190,11 @@ class Ec21BankLoanBorrowedComp extends Component
             ]);
 
             // Now assign the selected specifications to the borrowed loan
-            if ($this->selectedSpecifications) {
-                // First, delete existing specifications for this borrowed loan
-                $borrowedLoan->specifications()->delete();
+            // First, delete existing specifications for this borrowed loan
+            $borrowedLoan->specifications()->delete();
 
-                // Then add the selected specifications with their corresponding values
+            // Then add the selected specifications with their corresponding values
+            if ($this->selectedSpecifications) {
                 foreach ($this->selectedSpecifications as $specId) {
                     $specification = Ec21BankLoanSchemeSpecification::with('particular')->find($specId);
                     if ($specification) {

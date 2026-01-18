@@ -13,8 +13,8 @@ class Ec21BankLoanBorrowedSpec extends Model
     protected $fillable = [
         'bank_loan_borrowed_id',
         'bank_loan_scheme_specification_id',
-        'bank_loan_scheme_particular_id',
-        'bank_loan_scheme_particular_value',
+        'bank_loan_schema_particular_id',  // Corrected from bank_loan_scheme_particular_id
+        'bank_loan_schema_particular_value',  // Corrected from bank_loan_scheme_particular_value
         'is_percent_on_current_balance',
         'is_regular',
         'effected_on',
@@ -27,15 +27,15 @@ class Ec21BankLoanBorrowedSpec extends Model
     ];
     
     protected $casts = [
-        'bank_loan_scheme_particular_id' => 'integer',
-        'bank_loan_scheme_particular_value' => 'decimal:2',
+        'bank_loan_schema_particular_id' => 'integer',  // Corrected from bank_loan_scheme_particular_id
+        'bank_loan_schema_particular_value' => 'decimal:2',  // Corrected from bank_loan_scheme_particular_value
         'is_percent_on_current_balance' => 'boolean',
         'is_regular' => 'boolean',
         'effected_on' => 'date',
         'is_active' => 'boolean',
     ];
     
-
+    
     
     public function borrowedLoan()
     {
@@ -49,6 +49,6 @@ class Ec21BankLoanBorrowedSpec extends Model
     
     public function particular()
     {
-        return $this->belongsTo(Ec21BankLoanSchemaParticular::class, 'bank_loan_scheme_particular_id');
+        return $this->belongsTo(Ec21BankLoanSchemaParticular::class, 'bank_loan_schema_particular_id');  // Corrected from bank_loan_scheme_particular_id
     }
 }

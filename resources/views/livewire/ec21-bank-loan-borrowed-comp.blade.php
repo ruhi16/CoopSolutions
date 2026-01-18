@@ -101,7 +101,8 @@
                                             <table class="min-w-full divide-y divide-gray-200">
                                                 <thead class="bg-gray-100">
                                                     <tr>
-                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Particular</th>
+                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Particular ID</th>
+                                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Particular Name</th>
                                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
                                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Is Regular</th>
                                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Effected On</th>
@@ -111,6 +112,7 @@
                                                 <tbody class="bg-white divide-y divide-gray-200">
                                                     @foreach($loan->specifications as $spec)
                                                     <tr>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->bank_loan_schema_particular_id }}</td>
                                                         <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->particular->name ?? 'N/A' }}</td>
                                                         <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->bank_loan_schema_particular_value }}</td>
                                                         <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
@@ -307,21 +309,31 @@
                                     <table class="min-w-full divide-y divide-gray-200">
                                         <thead class="bg-gray-50">
                                             <tr>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Particular</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Particular ID</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Particular Name</th>
                                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
                                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Is Regular (Optional)</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Selected</th>
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
                                             @forelse($schemeSpecifications as $spec)
                                                 <tr>
+                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->bank_loan_schema_particular_id }}</td>
                                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->particular->name ?? 'N/A' }}</td>
                                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $spec->bank_loan_schema_particular_value }}</td>
                                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
                                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                                             {{ $spec->is_regular ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                                             {{ $spec->is_regular ? 'Yes' : 'No' }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                            {{ $spec->status === 'active' ? 'bg-green-100 text-green-800' : 
+                                                               ($spec->status === 'inactive' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800') }}">
+                                                            {{ ucfirst($spec->status) }}
                                                         </span>
                                                     </td>
                                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
@@ -339,7 +351,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="4" class="px-4 py-2 text-center text-gray-500">
+                                                    <td colspan="6" class="px-4 py-2 text-center text-gray-500">
                                                         No specifications found for this loan scheme
                                                     </td>
                                                 </tr>
