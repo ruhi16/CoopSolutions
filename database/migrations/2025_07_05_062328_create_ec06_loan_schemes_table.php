@@ -20,6 +20,7 @@ class CreateEc06LoanSchemesTable extends Migration
             $table->string('name_short')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->boolean('is_emi_enabled')->nullable()->default(false);
             $table->enum('status', ['running', 'completed', 'upcoming', 'suspended', 'cancelled'])->default('suspended')->nullable();
             
             

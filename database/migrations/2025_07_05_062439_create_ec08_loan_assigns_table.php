@@ -21,7 +21,7 @@ class CreateEc08LoanAssignsTable extends Migration{
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
 
-
+            $table->boolean('is_emi_enabled')->nullable()->default(false);
             $table->date('emi_payment_date')->nullable();
             $table->double('emi_amount', 10, 2)->nullable();
 

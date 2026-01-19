@@ -24,6 +24,10 @@ class CreateEc08LoanRequestsTable extends Migration
             $table->integer('time_period_months')->nullable();
             $table->date('req_date')->nullable();
 
+            $table->boolean('is_emi_enabled')->nullable()->default(false);
+            $table->date('emi_payment_date')->nullable();
+            $table->double('emi_amount', 10, 2)->nullable();
+
 
             $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled', 'closed', 'expired', 'overdue', 'completed'])->default('pending')->nullable();
             $table->date('status_assigning_date')->nullable();                      

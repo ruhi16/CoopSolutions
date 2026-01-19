@@ -35,4 +35,20 @@ class Ec09LoanAssignParticular extends Model
     {
         return $this->belongsTo(Ec07LoanSchemeDetail::class, 'loan_scheme_detail_id');
     }
+    
+    /**
+     * Get the loan scheme feature associated with this particular
+     */
+    public function loanSchemeFeature(): BelongsTo
+    {
+        return $this->belongsTo(Ec07LoanSchemeFeature::class, 'loan_scheme_feature_id');
+    }
+    
+    /**
+     * Get the loan scheme feature standard associated with this particular
+     */
+    public function loanSchemeFeatureStandard(): BelongsTo
+    {
+        return $this->belongsTo(Ec07LoanSchemeFeatureStandard::class, 'loan_scheme_feature_standard_id');
+    }
 }

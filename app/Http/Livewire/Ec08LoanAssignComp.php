@@ -199,13 +199,21 @@ class Ec08LoanAssignComp extends Component
             
             // Create loan assign particulars for each selected loan scheme detail
             foreach ($this->selectedLoanSchemeDetails as $detailId) {
-                Ec09LoanAssignParticular::create([
-                    'loan_assign_id' => $loanAssign->id,
-                    'loan_scheme_id' => $this->loan_scheme_id,
-                    'loan_scheme_detail_id' => $detailId,
-                    'is_regular' => true, // Assuming regular by default
-                    'is_active' => true,
-                ]);
+                // Get the loan scheme detail to copy feature values
+                $loanSchemeDetail = Ec07LoanSchemeDetail::find($detailId);
+                
+                if ($loanSchemeDetail) {
+                    Ec09LoanAssignParticular::create([
+                        'loan_assign_id' => $loanAssign->id,
+                        'loan_scheme_id' => $this->loan_scheme_id,
+                        'loan_scheme_detail_id' => $detailId,
+                        'loan_scheme_feature_id' => $loanSchemeDetail->loan_scheme_feature_id,
+                        'loan_scheme_feature_value' => $loanSchemeDetail->loan_scheme_feature_value,
+                        'loan_scheme_feature_standard_id' => $loanSchemeDetail->loan_scheme_feature_standard_id,
+                        'is_regular' => true, // Assuming regular by default
+                        'is_active' => true,
+                    ]);
+                }
             }
             
             // Create EMI schedule records
@@ -489,6 +497,15 @@ class Ec08LoanAssignComp extends Component
     // Auto-calculate EMI when loan scheme changes
     public function updatedLoanSchemeId()
     {
+        // Load loan scheme details for the selected loan scheme
+        if ($this->loan_scheme_id) {
+            $this->loanSchemeDetails = Ec07LoanSchemeDetail::where('loan_scheme_id', $this->loan_scheme_id)
+                ->where('is_active', true)
+                ->get();
+        } else {
+            $this->loanSchemeDetails = [];
+        }
+        
         $this->calculateEMI();
     }
     

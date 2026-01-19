@@ -114,6 +114,12 @@ class Ec001MainLayout extends Component{
                     'name' => 'loanassign',
                     'component' => 'ec08-loan-assign-comp'
                 ],
+                'loanpayment' => [
+                    'label' => 'Loan Payments',
+                    'icon' => 'fas fa-handshake',
+                    'name' => 'loanpayment',
+                    'component' => 'ec08-loan-payment-dashboard-comp'
+                ],
             ],
         ],
 
@@ -166,13 +172,19 @@ class Ec001MainLayout extends Component{
                     'name' => 'bankLoanBorrowed',
                     'component' => 'ec21-bank-loan-borrowed-comp'
                 ],
-                'loanRequest2' => [
-                    'label' => 'Loan Request 2',
-                    'icon' => 'fas fa-cog',
-                    'name' => 'loanRequest2',
-                    'component' =>'ec08-member-loan-request-comp2'
-                
+                'bankLoanPayment' => [
+                    'label' => 'Bank Payments',
+                    'icon' => 'fas fa-money-bill-wave',
+                    'name' => 'bankLoanPayment',
+                    'component' => 'ec21-bank-loan-payment-dashboard-comp'
                 ],
+                // 'loanRequest2' => [
+                //     'label' => 'Loan Request 2',
+                //     'icon' => 'fas fa-cog',
+                //     'name' => 'loanRequest2',
+                //     'component' =>'ec08-member-loan-request-comp2'
+                
+                // ],
             ],
         ],
 
