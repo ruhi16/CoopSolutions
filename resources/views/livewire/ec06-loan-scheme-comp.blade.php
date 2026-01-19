@@ -183,23 +183,21 @@
                     
                     <div class="flex items-center">
                         <label class="flex items-center cursor-pointer">
-                            <div class="relative">
-                                <input wire:model="is_emi_enabled" type="checkbox" class="sr-only">
-                                <div class="block w-10 h-6 rounded-full bg-gray-300 border-2 border-transparent transition-colors duration-200 ease-in-out checked:bg-blue-600 checked:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" :class="{'bg-blue-600': is_emi_enabled, 'bg-gray-300': !is_emi_enabled}"></div>
-                                <div class="absolute left-1 top-1 bg-white border-2 border-gray-300 rounded-full w-4 h-4 transition-transform duration-200 ease-in-out transform checked:translate-x-4" :class="{'translate-x-4': is_emi_enabled, 'translate-x-0': !is_emi_enabled}"></div>
-                            </div>
-                            <span class="ml-3 text-sm text-gray-700">EMI Enabled</span>
+                            <input 
+                                wire:model="is_emi_enabled" 
+                                type="checkbox" 
+                                class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <span class="ml-2 text-sm text-gray-700">EMI Enabled</span>
                         </label>
                     </div>
                     
                     <div class="flex items-center">
                         <label class="flex items-center cursor-pointer">
-                            <div class="relative">
-                                <input wire:model="is_active" type="checkbox" class="sr-only">
-                                <div class="block w-10 h-6 rounded-full bg-gray-300 border-2 border-transparent transition-colors duration-200 ease-in-out checked:bg-blue-600 checked:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" :class="{'bg-blue-600': is_active, 'bg-gray-300': !is_active}"></div>
-                                <div class="absolute left-1 top-1 bg-white border-2 border-gray-300 rounded-full w-4 h-4 transition-transform duration-200 ease-in-out transform checked:translate-x-4" :class="{'translate-x-4': is_active, 'translate-x-0': !is_active}"></div>
-                            </div>
-                            <span class="ml-3 text-sm text-gray-700">Is Active</span>
+                            <input 
+                                wire:model="is_active" 
+                                type="checkbox" 
+                                class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <span class="ml-2 text-sm text-gray-700">Is Active</span>
                         </label>
                     </div>
                 </div>
