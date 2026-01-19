@@ -20,7 +20,7 @@ Route::group(
     ['prefix' => 'admin', 'middleware' => ['web']],
     function () {
         Route::get('/organisation', Ec01Organisation::class)->name('organisation');
-        
+        Route::get('/loan-scheme', \App\Http\Livewire\Ec06LoanSchemeComp::class)->name('loan-scheme');
 
     }
 );

@@ -3,194 +3,135 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\Ec21BankLoanScheme;
-use App\Models\Ec20Bank;
-use App\Models\Ec01Organisation;
-use App\Models\Ec02FinancialYear;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use App\Models\Ec06LoanScheme;
 
-class Ec06LoanSchemeComp extends Component{
-
-    public $loanSchemes = null, $loanSchemeId;
-    public $showLoanSchemeModal = false;
+class Ec06LoanSchemeComp extends Component
+{
+    public $loanSchemes = null;
+    public $isOpen = false;
     
-    // Form fields
-    public $name, $description, $bank_id, $effected_on, $status;
-    public $organisation_id, $financial_year_id, $is_finalized, $remarks;
+    // Model properties
+    public $loan_scheme_id = null;
+    public $name = '';
+    public $name_short = '';
+    public $description = '';
+    public $start_date = '';
+    public $end_date = '';
     public $is_emi_enabled = false;
-    
-    // Dropdown data
-    public $banks = [], $organisations = [], $financialYears = [];
-    
-    // Search and pagination
-    public $search = '';
-    public $perPage = 10;
-    
-    // Loan schemes data (protected to avoid Livewire serialization issues)
-    protected $loanSchemesPaginator;
-    public $loanSchemesData = [];
+    public $status = 'suspended';
+    public $is_active = true;
+    public $remarks = '';
 
-
-    public function mount(){
-        $this->loadDropdowns();
-        $this->loadLoanSchemes();
-        
-        // Ensure paginator is initialized
-        if (!isset($this->loanSchemesPaginator)) {
-            $this->loadLoanSchemes();
-        }
-    }
-
-    
-    public function loadDropdowns()
+    public function mount()
     {
-        $this->banks = Ec20Bank::where('is_active', true)->get();
-        $this->organisations = Ec01Organisation::where('is_active', true)->get();
-        $this->financialYears = Ec02FinancialYear::where('is_active', true)->get();
-    }
-    
-    public function loadLoanSchemes()
-    {
-        $query = Ec21BankLoanScheme::with(['bank', 'organisation', 'financialYear']);
-        
-        if ($this->search) {
-            $query->where(function($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%');
-            });
-        }
-        
-        $this->loanSchemesPaginator = $query->orderBy('id', 'desc')->paginate($this->perPage);
-        $this->loanSchemesData = $this->loanSchemesPaginator->items();
-    }
-    
-    public function openModal($loanSchemeId = null){
-        $this->loanSchemeId = $loanSchemeId;
-        // Reset form fields
-        $this->resetForm();
-        
-        if($loanSchemeId){
-            // Find the loan scheme with proper error handling
-            $loanScheme = Ec21BankLoanScheme::find($loanSchemeId);
-            
-            // Only set properties if the loan scheme exists
-            if($loanScheme) {
-                $this->name = $loanScheme->name;
-                $this->description = $loanScheme->description;
-                $this->bank_id = $loanScheme->bank_id;
-                $this->effected_on = $loanScheme->effected_on;
-                $this->status = $loanScheme->status;
-                $this->organisation_id = $loanScheme->organisation_id;
-                $this->financial_year_id = $loanScheme->financial_year_id;
-                $this->is_finalized = $loanScheme->is_finalized;
-                $this->remarks = $loanScheme->remarks;
-                $this->is_emi_enabled = $loanScheme->is_emi_enabled ?? false;
-            }
-        } else {
-            // Set default values for new loan scheme
-            $this->organisation_id = session('organisation_id') ?? 1;
-            $this->financial_year_id = session('financial_year_id') ?? 1;
-            $this->status = 'suspended';
-            $this->is_finalized = false;
-        }
-    
-        $this->showLoanSchemeModal = true;
+        $this->loanSchemes = Ec06LoanScheme::all();
     }
 
-    public function resetForm()
+    // Open modal for creating a new loan scheme
+    public function openModal()
     {
+        $this->resetInputFields();
+        $this->isOpen = true;
+    }
+
+    // Open modal for editing an existing loan scheme
+    public function edit($id)
+    {
+        $loanScheme = Ec06LoanScheme::findOrFail($id);
+        $this->loan_scheme_id = $id;
+        $this->name = $loanScheme->name;
+        $this->name_short = $loanScheme->name_short;
+        $this->description = $loanScheme->description;
+        $this->start_date = $loanScheme->start_date ? $loanScheme->start_date->format('Y-m-d') : '';
+        $this->end_date = $loanScheme->end_date ? $loanScheme->end_date->format('Y-m-d') : '';
+        $this->is_emi_enabled = $loanScheme->is_emi_enabled;
+        $this->status = $loanScheme->status;
+        $this->is_active = $loanScheme->is_active;
+        $this->remarks = $loanScheme->remarks;
+        $this->isOpen = true;
+    }
+
+    // Close modal and reset input fields
+    public function closeModal()
+    {
+        $this->isOpen = false;
+        $this->resetInputFields();
+    }
+
+    // Reset input fields
+    private function resetInputFields()
+    {
+        $this->loan_scheme_id = null;
         $this->name = '';
+        $this->name_short = '';
         $this->description = '';
-        $this->bank_id = null;
-        $this->effected_on = null;
-        $this->status = 'suspended';
-        $this->organisation_id = null;
-        $this->financial_year_id = null;
-        $this->is_finalized = false;
-        $this->remarks = '';
+        $this->start_date = '';
+        $this->end_date = '';
         $this->is_emi_enabled = false;
-        $this->resetErrorBag();
+        $this->status = 'suspended';
+        $this->is_active = true;
+        $this->remarks = '';
     }
 
-    public function closeModal(){
-        $this->showLoanSchemeModal = false;
-        $this->resetForm();
-    }
-
-    public function saveLoanScheme(){
-        
+    // Store or update loan scheme
+    public function store()
+    {
         $this->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'bank_id' => 'nullable|exists:ec20_banks,id',
-            'effected_on' => 'nullable|date',
-            'status' => 'required|in:running,completed,upcoming,suspended,cancelled',
-            'organisation_id' => 'required|exists:ec01_organisations,id',
-            'financial_year_id' => 'required|exists:ec02_financial_years,id',
-            'remarks' => 'nullable|string|max:500',
-            'is_emi_enabled' => 'boolean'
+            'name_short' => 'required|string|max:50',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
-        
-        
-        try{
-            
-            $data = Ec21BankLoanScheme::updateOrCreate([
-                'id' => $this->loanSchemeId,
-            ],[
-                'name' => $this->name,
-                'description' => $this->description,
-                'bank_id' => $this->bank_id,
-                'effected_on' => $this->effected_on,
-                'status' => $this->status,
-                'organisation_id' => $this->organisation_id,
-                'financial_year_id' => $this->financial_year_id,
-                'is_finalized' => $this->is_finalized,
-                'finalized_by' => $this->is_finalized ? Auth::id() : null,
-                'finalized_at' => $this->is_finalized ? now() : null,
-                'user_id' => Auth::id(),
-                'remarks' => $this->remarks,
-                'is_emi_enabled' => $this->is_emi_enabled,
-                'is_active' => true
-            ]);
-            
-            
-            session()->flash('success', 'Bank Loan Scheme saved successfully');
-            
-        }catch(\Exception $e){
-            session()->flash('error', 'Failed to save bank loan scheme: ' . $e->getMessage());
-            
-        }
-        
-        
+
+        $loanSchemeData = [
+            'name' => $this->name,
+            'name_short' => $this->name_short,
+            'description' => $this->description,
+            'start_date' => $this->start_date ?: null,
+            'end_date' => $this->end_date ?: null,
+            'is_emi_enabled' => $this->is_emi_enabled,
+            'status' => $this->status,
+            'is_active' => $this->is_active,
+            'remarks' => $this->remarks,
+        ];
+
+        Ec06LoanScheme::updateOrCreate(
+            ['id' => $this->loan_scheme_id],
+            $loanSchemeData
+        );
+
+        session()->flash(
+            $this->loan_scheme_id ? 'success' : 'success',
+            $this->loan_scheme_id ? 'Loan Scheme Updated Successfully.' : 'Loan Scheme Created Successfully.'
+        );
+
         $this->closeModal();
-        $this->loadLoanSchemes();
+        $this->loanSchemes = Ec06LoanScheme::all();
     }
-    
-    public function deleteLoanScheme($id)
+
+    // Delete loan scheme
+    public function delete($id)
     {
-        try {
-            $loanScheme = Ec21BankLoanScheme::findOrFail($id);
-            $loanScheme->update(['is_active' => false]);
-            session()->flash('success', 'Bank Loan Scheme deactivated successfully');
-        } catch (\Exception $e) {
-            session()->flash('error', 'Failed to deactivate bank loan scheme: ' . $e->getMessage());
-        }
+        Ec06LoanScheme::find($id)->delete();
+        $this->loanSchemes = Ec06LoanScheme::all();
+        session()->flash('success', 'Loan Scheme Deleted Successfully.');
+    }
+
+    public function getStatusClass($status)
+    {
+        $statusClasses = [
+            'running' => 'bg-green-100 text-green-800',
+            'completed' => 'bg-blue-100 text-blue-800',
+            'upcoming' => 'bg-yellow-100 text-yellow-800',
+            'suspended' => 'bg-red-100 text-red-800',
+            'cancelled' => 'bg-gray-100 text-gray-800',
+        ];
         
-        $this->loadLoanSchemes();
+        return $statusClasses[$status] ?? 'bg-gray-100 text-gray-800';
     }
-    
-    public function updatedSearch()
-    {
-        $this->loadLoanSchemes();
-    }
-
-
 
     public function render()
     {
-        return view('livewire.ec06-loan-scheme-comp', [
-            'loanSchemesPaginator' => $this->loanSchemesPaginator
-        ]);
+        return view('livewire.ec06-loan-scheme-comp');
     }
 }
