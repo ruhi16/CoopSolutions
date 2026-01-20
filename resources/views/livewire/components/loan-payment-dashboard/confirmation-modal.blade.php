@@ -1,5 +1,6 @@
 <!-- Confirmation Modal -->
-<div x-data="{ show: @entangle('showConfirmationModal') }" x-show="show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+<div x-data="{ show: @entangle('showConfirmationModal') }" x-show="show"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 m-4">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-medium text-gray-900">Confirm Payment</h3>
@@ -52,16 +53,12 @@
         </div>
 
         <div class="mt-6 flex justify-end space-x-3">
-            <button 
-                wire:click="closeConfirmationModal" 
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md"
-            >
+            <button wire:click="closeConfirmationModal"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">
                 Cancel
             </button>
-            <button 
-                wire:click="completePayment" 
-                class="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md"
-            >
+            <button wire:click="completePayment"
+                class="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md">
                 Complete Payment
             </button>
         </div>

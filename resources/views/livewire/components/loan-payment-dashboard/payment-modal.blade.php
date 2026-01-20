@@ -1,5 +1,6 @@
 <!-- Payment Modal -->
-<div x-data="{ show: @entangle('showPaymentModal') }" x-show="show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+<div x-data="{ show: @entangle('showPaymentModal') }" x-show="show"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 m-4">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-medium text-gray-900">Process Payment</h3>
@@ -36,14 +37,9 @@
 
             <div>
                 <label for="paymentAmount" class="block text-sm font-medium text-gray-700">Payment Amount</label>
-                <input 
-                    type="number" 
-                    id="paymentAmount" 
-                    wire:model="paymentAmount" 
+                <input type="number" id="paymentAmount" wire:model="paymentAmount"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    min="0"
-                    step="0.01"
-                >
+                    min="0" step="0.01">
                 @error('paymentAmount')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -51,12 +47,8 @@
 
             <div>
                 <label for="paymentDate" class="block text-sm font-medium text-gray-700">Payment Date</label>
-                <input 
-                    type="date" 
-                    id="paymentDate" 
-                    wire:model="paymentDate" 
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                >
+                <input type="date" id="paymentDate" wire:model="paymentDate"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 @error('paymentDate')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -64,11 +56,8 @@
 
             <div>
                 <label for="paymentMethod" class="block text-sm font-medium text-gray-700">Payment Method</label>
-                <select 
-                    id="paymentMethod" 
-                    wire:model="paymentMethod" 
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                >
+                <select id="paymentMethod" wire:model="paymentMethod"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     <option value="">Select Method</option>
                     <option value="cash">Cash</option>
                     <option value="bank_transfer">Bank Transfer</option>
@@ -82,16 +71,12 @@
         </div>
 
         <div class="mt-6 flex justify-end space-x-3">
-            <button 
-                wire:click="closePaymentModal" 
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md"
-            >
+            <button wire:click="closePaymentModal"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">
                 Cancel
             </button>
-            <button 
-                wire:click="confirmPayment" 
-                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md"
-            >
+            <button wire:click="confirmPayment"
+                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
                 Confirm Payment
             </button>
         </div>
