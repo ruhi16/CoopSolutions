@@ -59,6 +59,12 @@
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
                     data-sort="id">Request Amount <i class="fas fa-sort text-gray-400 ml-1"></i> </th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    data-sort="id">EMI Enabled <i class="fas fa-sort text-gray-400 ml-1"></i> </th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    data-sort="id">EMI Amount <i class="fas fa-sort text-gray-400 ml-1"></i> </th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    data-sort="id">EMI Payment Date <i class="fas fa-sort text-gray-400 ml-1"></i> </th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
                     data-sort="id">Status <i class="fas fa-sort text-gray-400 ml-1"></i> </th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
                     data-sort="id">Actions <i class="fas fa-sort text-gray-400 ml-1"></i> </th>
@@ -86,6 +92,24 @@
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                         {{ $loanRequest->req_loan_amount ?? 'X' }}
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                        @if($loanRequest->is_emi_enabled)
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Yes
+                            </span>
+                        @else
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                No
+                            </span>
+                        @endif
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ $loanRequest->emi_amount ?? 'N/A' }}
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ $loanRequest->emi_payment_date ?? 'N/A' }}
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                         @if($loanRequest && $loanRequest->isAssigned())
@@ -126,10 +150,10 @@
 
     <!-- Loan Scheme Modal -->
     <div id="loanSchemeDetailModal"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showLoanRequestModal ? 'block' : 'hidden' }}">
-        <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-2xl mx-4">
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showLoanRequestModal ? 'block' : 'hidden' }} p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
                 <h2 class="text-2xl font-bold text-gray-900">New <span class="text-blue-700">Loan Request </span>Detail
                     Entry</h2>
                 <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600">
@@ -137,10 +161,10 @@
                 </button>
             </div>
 
-            <form id="loanRequest" wire:submit.prevent="saveLoanRequest" class="space-y-4">
+            <form id="loanRequest" wire:submit.prevent="saveLoanRequest" class="p-6 space-y-4">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <div class="mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
                         <label for="selectedMemberId" class="block text-sm font-medium text-gray-700 mb-2">Member
                             Name</label>
                         <select wire:model="selectedMemberId" name="selectedMemberId" id="selectedMemberId"
@@ -151,11 +175,11 @@
                             @endforeach
                         </select>
                         @error('selectedMemberId')
-                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div>
                         <label for="selectedLoanSchemeId" class="block text-sm font-medium text-gray-700 mb-2">Loan
                             Scheme</label>
                         <select wire:model="selectedLoanSchemeId" name="selectedLoanSchemeId" id="selectedLoanSchemeId"
@@ -166,13 +190,13 @@
                             @endforeach
                         </select>
                         @error('selectedLoanSchemeId')
-                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <div class="mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
                         <label for="selectedTimePeriod" class="block text-sm font-medium text-gray-700 mb-2">Time in
                             Years</label>
                         <select wire:model="selectedTimePeriod" name="selectedTimePeriod" id="selectedTimePeriod"
@@ -185,22 +209,19 @@
                             <option value="5">Five Year</option>
                             <option value="6">Six Year</option>
                             <option value="7">Seven Year</option>
-                            {{-- @foreach ($loanSchemes as $loanScheme)
-                            <option value="{{ $loanScheme->id }}">{{ $loanScheme->name }}</option>
-                            @endforeach --}}
                         </select>
                         @error('selectedTimePeriod')
-                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div>
                         <label for="expectedAmount" class="block text-sm font-medium text-gray-700 mb-2">Expected
                             Value</label>
                         <input wire:model="expectedAmount" type="text" id="expectedAmount" name="expectedAmount"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         @error('expectedAmount')
-                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -237,13 +258,51 @@
                     </table>
                 </div>
 
+                <!-- New Fields Section -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="isEmiEnabled" class="block text-sm font-medium text-gray-700 mb-2">EMI
+                            Enabled</label>
+                        <div class="flex items-center">
+                            <input wire:model="isEmiEnabled" type="checkbox" id="isEmiEnabled" name="isEmiEnabled"
+                                class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <span class="ml-2 text-sm text-gray-600">Enable EMI payments</span>
+                        </div>
+                        @error('isEmiEnabled')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="emiAmount" class="block text-sm font-medium text-gray-700 mb-2">EMI Amount</label>
+                        <input wire:model="emiAmount" type="number" id="emiAmount" name="emiAmount" step="0.01"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        @error('emiAmount')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="emiPaymentDate" class="block text-sm font-medium text-gray-700 mb-2">EMI Payment
+                            Date</label>
+                        <input wire:model="emiPaymentDate" type="date" id="emiPaymentDate" name="emiPaymentDate"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Select a date to use only the day part (e.g., 15th of
+                            every month)</p>
+                        @error('emiPaymentDate')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
                 <!-- EMI Calculator Section -->
-                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                <div class="p-4 bg-blue-50 rounded-lg">
                     <h3 class="text-lg font-medium text-gray-900 mb-3">EMI Calculation</h3>
 
                     <!-- EMI Amount Display -->
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Monthly EMI Amount</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Calculated Monthly EMI
+                            Amount</label>
                         <input type="text" value="{{ $emi_amount ? number_format($emi_amount, 2) : '0.00' }}"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" readonly
                             placeholder="EMI will be calculated automatically">
@@ -251,7 +310,7 @@
 
                     <!-- Monthly EMI Breakdown Table -->
                     @if(count($monthlyBreakdown) > 0)
-                        <div class="mb-4">
+                        <div>
                             <h4 class="text-md font-medium text-gray-900 mb-2">Monthly EMI Breakdown</h4>
                             <div class="relative overflow-x-auto bg-white rounded-lg max-h-96 overflow-y-auto">
                                 <table class="w-full text-sm text-left text-gray-500">
@@ -326,9 +385,9 @@
 
     <!-- EMI Details Modal -->
     <div id="emiDetailsModal"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showEmiDetailsModal ? 'block' : 'hidden' }}">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl mx-4 max-h-90vh overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 {{ $showEmiDetailsModal ? 'block' : 'hidden' }} p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 p-6 border-b border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900">EMI Details for <span
                         class="text-blue-700">{{ $selectedLoanRequest->member->name ?? 'N/A' }}</span></h2>
                 <button wire:click="closeEmiDetailsModal" class="text-gray-400 hover:text-gray-600">
@@ -337,7 +396,7 @@
             </div>
 
             <div class="mb-4">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-7 gap-4">
                     <div class="bg-blue-50 p-3 rounded">
                         <p class="text-sm text-gray-600">Loan Amount</p>
                         <p class="font-medium">{{ $selectedLoanRequest->req_loan_amount ?? 'N/A' }}</p>
@@ -349,6 +408,32 @@
                     <div class="bg-blue-50 p-3 rounded">
                         <p class="text-sm text-gray-600">Tenure (Months)</p>
                         <p class="font-medium">{{ $selectedLoanRequest->time_period_months ?? 'N/A' }}</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">EMI Enabled</p>
+                        <p class="font-medium">
+                            @if($selectedLoanRequest && $selectedLoanRequest->is_emi_enabled)
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Yes
+                                </span>
+                            @else
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    No
+                                </span>
+                            @endif
+                        </p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">EMI Amount</p>
+                        <p class="font-medium">{{ $selectedLoanRequest->emi_amount ?? 'N/A' }}</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">EMI Payment Day</p>
+                        <p class="font-medium">
+                            {{ $selectedLoanRequest && $selectedLoanRequest->emi_payment_date ? $selectedLoanRequest->emi_payment_date . 'th' : 'N/A' }}
+                        </p>
                     </div>
                     <div class="bg-blue-50 p-3 rounded">
                         <p class="text-sm text-gray-600">Status</p>
@@ -373,27 +458,27 @@
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-4 py-3">EMI #</th>
-                            <th scope="col" class="px-4 py-3">Total EMI</th>
+                            <th scope="col" class="px-4 py-3">Month #</th>
+                            <th scope="col" class="px-4 py-3">EMI Amount</th>
                             <th scope="col" class="px-4 py-3">Principal</th>
                             <th scope="col" class="px-4 py-3">Interest</th>
-                            <th scope="col" class="px-4 py-3">Total Remaining Principal</th>
+                            <th scope="col" class="px-4 py-3">Remaining Balance</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if(isset($selectedLoanRequest->emiDetails) && count($selectedLoanRequest->emiDetails) > 0)
                             @foreach($selectedLoanRequest->emiDetails as $detail)
                                 <tr class="bg-white border-b hover:bg-gray-50">
-                                    <td class="px-4 py-3 font-medium text-gray-900">{{ $detail['emi_sl'] }}</td>
-                                    <td class="px-4 py-3">{{ number_format($detail['principal'] + $detail['interest'], 2) }}</td>
-                                    <td class="px-4 py-3">{{ $detail['principal'] }}</td>
-                                    <td class="px-4 py-3">{{ $detail['interest'] }}</td>
-                                    <td class="px-4 py-3">{{ $detail['total_remaining_principal'] }}</td>
+                                    <td class="px-4 py-3 font-medium text-gray-900">{{ $detail['month'] }}</td>
+                                    <td class="px-4 py-3">{{ number_format($detail['emi'], 2) }}</td>
+                                    <td class="px-4 py-3">{{ number_format($detail['principal'], 2) }}</td>
+                                    <td class="px-4 py-3">{{ number_format($detail['interest'], 2) }}</td>
+                                    <td class="px-4 py-3">{{ number_format($detail['balance'], 2) }}</td>
                                 </tr>
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="4" class="px-4 py-3 text-center text-gray-500">No EMI details available</td>
+                                <td colspan="5" class="px-4 py-3 text-center text-gray-500">No EMI details available</td>
                             </tr>
                         @endif
                     </tbody>

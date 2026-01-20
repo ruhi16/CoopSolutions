@@ -118,7 +118,7 @@ class Ec001MainLayout extends Component{
                     'label' => 'Loan Payments',
                     'icon' => 'fas fa-handshake',
                     'name' => 'loanpayment',
-                    'component' => 'ec08-loan-payment-dashboard-comp'
+                    'component' => 'ec11-loan-payment-dashboard-comp'
                 ],
             ],
         ],

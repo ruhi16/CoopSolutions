@@ -20,6 +20,8 @@ class Ec08LoanRequestComp extends Component
     public $showEmiDetailsModal = false;
     public $loanRequests = null, $selectedLoanRequestId = null;
     public $selectedLoanRequest = null;
+    
+    public $isEmiEnabled = false, $emiAmount = null, $emiPaymentDate = null;
 
     public $emi_amount = null;
     public $principal_amount = null;
@@ -39,6 +41,9 @@ class Ec08LoanRequestComp extends Component
         $this->selectedLoanSchemeId = null;
         $this->expectedAmount = null;
         $this->loanDate = null;
+        $this->isEmiEnabled = false;
+        $this->emiAmount = null;
+        $this->emiPaymentDate = null;
     }
     
     public function mount(){
@@ -73,6 +78,12 @@ class Ec08LoanRequestComp extends Component
         }
     }
 
+    public function updatedIsEmiEnabled($value){
+        if ($value && $this->selectedLoanSchemeId && $this->expectedAmount && $this->selectedTimePeriod) {
+            $this->calculateEMI();
+        }
+    }
+
     public function openModal($loanRequestId = null){
         if($loanRequestId != null){
             // when 'edit' button is pressed
@@ -84,6 +95,16 @@ class Ec08LoanRequestComp extends Component
             $this->selectedTimePeriod = (int) $loanRequest->time_period_months / 12;
             $this->expectedAmount = $loanRequest->req_loan_amount;
             $this->loanDate = $loanRequest->req_date;
+            $this->isEmiEnabled = $loanRequest->is_emi_enabled;
+            $this->emiAmount = $loanRequest->emi_amount;
+            // Convert day-of-month integer back to a date format for the form
+            if ($loanRequest->emi_payment_date) {
+                // Use current year and month with the stored day
+                $currentDate = \Carbon\Carbon::now();
+                $this->emiPaymentDate = $currentDate->year . '-' . str_pad($currentDate->month, 2, '0', STR_PAD_LEFT) . '-' . str_pad($loanRequest->emi_payment_date, 2, '0', STR_PAD_LEFT);
+            } else {
+                $this->emiPaymentDate = null;
+            }
 
         }else{
             // when 'add new' button is pressed
@@ -93,6 +114,9 @@ class Ec08LoanRequestComp extends Component
             $this->selectedLoanSchemeId = null;
             $this->loanAmount = null;
             $this->loanDate = null;
+            $this->isEmiEnabled = false;
+            $this->emiAmount = null;
+            $this->emiPaymentDate = null;
         }
 
         $this->showLoanRequestModal = true;
@@ -140,7 +164,12 @@ class Ec08LoanRequestComp extends Component
             }
         ])->find($loanRequestId);
         
-        $this->showEmiDetailsModal = true;
+        // Check if loan request exists before showing modal
+        if ($this->selectedLoanRequest) {
+            $this->showEmiDetailsModal = true;
+        } else {
+            session()->flash('error', 'Loan request not found.');
+        }
     }
 
     public function closeEmiDetailsModal(){
@@ -159,142 +188,15 @@ class Ec08LoanRequestComp extends Component
             }
         ])->find($loanRequestId);
         
-        // Calculate EMI breakdown if loan is assigned
-        if($loanRequest->loanAssign) {
-            $loanAssign = $loanRequest->loanAssign;
+        if ($loanRequest) {
+            // Use the model's built-in method to get amortization schedule
+            $loanRequest->emiDetails = $loanRequest->getAmortizationSchedule();
             
-            // Get loan scheme details to calculate EMI breakdown - specifically for interest rate
-            $interestRateFeature = \App\Models\Ec07LoanSchemeFeature::where('loan_scheme_feature_name', 'like', '%interest%')
-                ->orWhere('loan_scheme_feature_name', 'like', '%roi%')
-                ->orWhere('loan_scheme_feature_name', 'like', '%rate%')
-                ->first();
-            
-            if ($interestRateFeature) {
-                $loanSchemeDetail = \App\Models\Ec07LoanSchemeDetail::where('loan_scheme_id', $loanRequest->req_loan_scheme_id)
-                    ->where('loan_scheme_feature_id', $interestRateFeature->id)
-                    ->where('is_active', true)
-                    ->orderBy('updated_at', 'desc')
-                    ->first();
-            } else {
-                // Fallback: try to find any feature that might represent interest rate
-                $loanSchemeDetail = \App\Models\Ec07LoanSchemeDetail::where('loan_scheme_id', $loanRequest->req_loan_scheme_id)
-                    ->whereHas('loanSchemeFeature', function($query) {
-                        $query->where('loan_scheme_feature_name', 'like', '%interest%')
-                              ->orWhere('loan_scheme_feature_name', 'like', '%roi%')
-                              ->orWhere('loan_scheme_feature_name', 'like', '%rate%');
-                    })
-                    ->where('is_active', true)
-                    ->orderBy('updated_at', 'desc')
-                    ->first();
-            }
-            
-            if($loanSchemeDetail && $loanAssign->emi_amount) {
-                $annualInterestRate = $loanSchemeDetail->loan_scheme_feature_value ?? 0;
-                $monthlyInterestRate = $annualInterestRate / 12 / 100;
-                
-                // Calculate the breakdown for each EMI schedule
-                $emiDetails = [];
-                $remainingPrincipal = $loanAssign->loan_amount;
-                
-                if($monthlyInterestRate > 0) {
-                    foreach($loanAssign->loanAssignSchedules as $index => $schedule) {
-                        $interestForThisMonth = $remainingPrincipal * $monthlyInterestRate;
-                        $principalForThisMonth = $loanAssign->emi_amount - $interestForThisMonth;
-                        
-                        // Adjust for the last payment if needed
-                        if($principalForThisMonth > $remainingPrincipal) {
-                            $principalForThisMonth = $remainingPrincipal;
-                            $interestForThisMonth = $loanAssign->emi_amount - $principalForThisMonth;
-                        }
-                        
-                        $emiDetails[] = [
-                            'emi_sl' => $index + 1,
-                            'principal' => round($principalForThisMonth, 2),
-                            'interest' => round($interestForThisMonth, 2),
-                            'total_remaining_principal' => round($remainingPrincipal - $principalForThisMonth, 2)
-                        ];
-                        
-                        $remainingPrincipal -= $principalForThisMonth;
-                        $remainingPrincipal = max(0, $remainingPrincipal); // Ensure it doesn't go negative
-                    }
-                } else {
-                    // If no interest, divide principal equally
-                    $totalSchedules = count($loanAssign->loanAssignSchedules);
-                    $principalPerInstallment = $loanAssign->loan_amount / $totalSchedules;
-                    
-                    foreach($loanAssign->loanAssignSchedules as $index => $schedule) {
-                        $emiDetails[] = [
-                            'emi_sl' => $index + 1,
-                            'principal' => round($principalPerInstallment, 2),
-                            'interest' => 0,
-                            'total_remaining_principal' => round($loanAssign->loan_amount - ($principalPerInstallment * ($index + 1)), 2)
-                        ];
-                    }
-                }
-                
-                $loanRequest->emiDetails = $emiDetails;
-            } else {
-                // If no loan assign or scheme details, set empty details
-                $loanRequest->emiDetails = [];
-            }
+            $this->selectedLoanRequest = $loanRequest;
+            $this->showEmiDetailsModal = true;
         } else {
-            // If loan is not assigned yet, calculate based on request
-            // Use the stored ROI from the loan request
-            $annualInterestRate = $loanRequest->req_loan_schema_roi_copy ?? 0;
-            $monthlyInterestRate = $annualInterestRate / 12 / 100;
-            $loanAmount = $loanRequest->req_loan_amount;
-            $months = $loanRequest->time_period_months;
-            
-            if($monthlyInterestRate > 0 && $months > 0) {
-                // Calculate EMI using the formula: EMI = P * r * (1+r)^n / ((1+r)^n - 1)
-                $emi = $loanAmount * $monthlyInterestRate * pow(1 + $monthlyInterestRate, $months) / (pow(1 + $monthlyInterestRate, $months) - 1);
-                
-                // Calculate breakdown for each month
-                $emiDetails = [];
-                $remainingPrincipal = $loanAmount;
-                
-                for($i = 1; $i <= $months; $i++) {
-                    $interestForThisMonth = $remainingPrincipal * $monthlyInterestRate;
-                    $principalForThisMonth = $emi - $interestForThisMonth;
-                    
-                    // Adjust for the last payment if needed
-                    if($principalForThisMonth > $remainingPrincipal) {
-                        $principalForThisMonth = $remainingPrincipal;
-                        $interestForThisMonth = $emi - $principalForThisMonth;
-                    }
-                    
-                    $emiDetails[] = [
-                        'emi_sl' => $i,
-                        'principal' => round($principalForThisMonth, 2),
-                        'interest' => round($interestForThisMonth, 2),
-                        'total_remaining_principal' => round($remainingPrincipal - $principalForThisMonth, 2)
-                    ];
-                    
-                    $remainingPrincipal -= $principalForThisMonth;
-                    $remainingPrincipal = max(0, $remainingPrincipal); // Ensure it doesn't go negative
-                }
-                
-                $loanRequest->emiDetails = $emiDetails;
-            } else {
-                // If no interest, divide principal equally
-                $principalPerInstallment = $loanAmount / $months;
-                $emiDetails = [];
-                
-                for($i = 1; $i <= $months; $i++) {
-                    $emiDetails[] = [
-                        'emi_sl' => $i,
-                        'principal' => round($principalPerInstallment, 2),
-                        'interest' => 0,
-                        'total_remaining_principal' => round($loanAmount - ($principalPerInstallment * $i), 2)
-                    ];
-                }
-                
-                $loanRequest->emiDetails = $emiDetails;
-            }
+            session()->flash('error', 'Loan request not found.');
         }
-        
-        $this->selectedLoanRequest = $loanRequest;
-        $this->showEmiDetailsModal = true;
     }
 
 
@@ -382,6 +284,11 @@ class Ec08LoanRequestComp extends Component
             // Simple equal distribution when no interest
             $this->calculateMonthlyBreakdown($principal, 0, $months, $this->emi_amount);
         }
+        
+        // Set the emi_amount field when EMI is enabled
+        if ($this->isEmiEnabled) {
+            $this->emiAmount = $this->emi_amount;
+        }
     }
 
     private function calculateMonthlyBreakdown($principal, $monthlyInterestRate, $months, $emi_amount)
@@ -437,6 +344,9 @@ class Ec08LoanRequestComp extends Component
             'selectedLoanSchemeId' => 'required',
             'selectedTimePeriod' => 'required',
             'expectedAmount' => 'required',
+            'isEmiEnabled' => 'boolean',
+            'emiAmount' => 'nullable|numeric|min:0',
+            'emiPaymentDate' => 'nullable|date_format:Y-m-d',
             // 'req_ate' => 'required',
             // 'status' => 'required',
         ]);
@@ -473,6 +383,14 @@ class Ec08LoanRequestComp extends Component
                 $roi = $loanSchemeDetail ? $loanSchemeDetail->loan_scheme_feature_value : null;
             }
 
+            // Process emiPaymentDate to only keep the day part if it's provided
+            $processedEmiPaymentDate = null;
+            if ($this->emiPaymentDate) {
+                $date = \Carbon\Carbon::parse($this->emiPaymentDate);
+                // Just store the day number (1-31) for recurring monthly payments
+                $processedEmiPaymentDate = $date->day;
+            }
+
             // Prepare the attributes to save
             $attributes = [
                 'member_id' => $this->selectedMemberId,
@@ -483,6 +401,9 @@ class Ec08LoanRequestComp extends Component
                 'time_period_months' => (int) $this->selectedTimePeriod * 12,
                 'req_date' => now(), // $this->loanDate,
                 'status' => 'pending',
+                'is_emi_enabled' => $this->isEmiEnabled,
+                'emi_amount' => $this->emiAmount,
+                'emi_payment_date' => $processedEmiPaymentDate, // Store only the day number
             ];
 
             // Use updateOrCreate with proper key-value pairs

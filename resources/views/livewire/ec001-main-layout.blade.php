@@ -330,6 +330,8 @@
                         @livewire('ec08-loan-request-comp')
                     @elseif($activeMenu == 'loanassign')
                         @livewire('ec08-loan-assign-comp')
+                    @elseif($activeMenu == 'loanpayment')
+                        @livewire('ec11-loan-payment-dashboard-comp')
 
                         {{-- Fund Management Components --}}
                     @elseif($activeMenu == 'thriftFund')

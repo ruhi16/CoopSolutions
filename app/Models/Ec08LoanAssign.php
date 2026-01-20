@@ -11,7 +11,25 @@ class Ec08LoanAssign extends Model
 {
     use HasFactory;
     protected $table = 'ec08_loan_assigns';
-    protected $guarded = ['id'];
+    
+    protected $fillable = [
+        'member_id',
+        'organisation_id',
+        'loan_request_id',
+        'loan_scheme_id',
+        'loan_amount',
+        'loan_start_date',
+        'loan_end_date',
+        'loan_status',
+        'is_active',
+        'remarks',
+    ];
+    
+    protected $casts = [
+        'loan_start_date' => 'date',
+        'loan_end_date' => 'date',
+        'is_active' => 'boolean',
+    ];
     
     /**
      * Get the organization that owns the loan assignment
@@ -67,5 +85,13 @@ class Ec08LoanAssign extends Model
     public function loanPayments(): HasMany
     {
         return $this->hasMany(Ec11LoanPayment::class, 'loan_assign_id');
+    }
+    
+    /**
+     * Get the loan payment details for this assignment
+     */
+    public function loanPaymentDetails()
+    {
+        return $this->hasManyThrough(Ec12LoanPaymentDetail::class, Ec11LoanPayment::class, 'loan_assign_id', 'loan_payment_id', 'id', 'id');
     }
 }
