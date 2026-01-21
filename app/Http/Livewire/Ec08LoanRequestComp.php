@@ -87,9 +87,15 @@ class Ec08LoanRequestComp extends Component
     public function openModal($loanRequestId = null){
         if($loanRequestId != null){
             // when 'edit' button is pressed
-            $this->selectedLoanRequestId = $loanRequestId;
-
             $loanRequest = \App\Models\Ec08LoanRequest::find($loanRequestId);
+            
+            // Check if the loan request is assigned
+            if ($loanRequest && $loanRequest->isAssigned()) {
+                session()->flash('error', 'Cannot edit loan request that is already assigned.');
+                return;
+            }
+            
+            $this->selectedLoanRequestId = $loanRequestId;
             $this->selectedMemberId = $loanRequest->member_id;
             $this->selectedLoanSchemeId = $loanRequest->req_loan_scheme_id;
             $this->selectedTimePeriod = (int) $loanRequest->time_period_months / 12;
@@ -128,6 +134,14 @@ class Ec08LoanRequestComp extends Component
     }
 
     public function confirmDelete($loanRequestId){ // This method is not used in the current blade file for this component.
+        $loanRequest = \App\Models\Ec08LoanRequest::find($loanRequestId);
+        
+        // Check if the loan request is assigned
+        if ($loanRequest && $loanRequest->isAssigned()) {
+            session()->flash('error', 'Cannot delete loan request that is already assigned.');
+            return;
+        }
+        
         $this->deleteConfirmId = $loanRequestId;
         $this->showDeleteConfirmModal = true;
     }
@@ -141,6 +155,14 @@ class Ec08LoanRequestComp extends Component
         if($this->deleteConfirmId){
             try{
                 $data = \App\Models\Ec08LoanRequest::find($this->deleteConfirmId);
+                
+                // Double check if the loan request is assigned
+                if ($data && $data->isAssigned()) {
+                    session()->flash('error', 'Cannot delete loan request that is already assigned.');
+                    $this->cancelDelete();
+                    return;
+                }
+                
                 $data->delete();
 
                 $this->refresh();
@@ -410,6 +432,14 @@ class Ec08LoanRequestComp extends Component
             if ($this->selectedLoanRequestId) {
                 // Update existing record
                 $loanRequest = \App\Models\Ec08LoanRequest::find($this->selectedLoanRequestId);
+                
+                // Check if the loan request is assigned before updating
+                if ($loanRequest && $loanRequest->isAssigned()) {
+                    session()->flash('error', 'Cannot update loan request that is already assigned.');
+                    $this->closeModal();
+                    return;
+                }
+                
                 if ($loanRequest) {
                     $loanRequest->update($attributes);
                 }

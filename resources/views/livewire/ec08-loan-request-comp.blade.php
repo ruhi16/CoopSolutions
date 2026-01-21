@@ -129,16 +129,27 @@
                             class="text-green-600 hover:text-green-900 mr-2">
                             <i class="fas fa-snowflake"></i>
                         </button>
-                        <button wire:click="openModal({{ $loanRequest->id }})"
-                            class="text-blue-600 hover:text-blue-900 mr-2">
-                            <i class="fas fa-edit"></i>
-                        </button>
+                        @if($loanRequest && $loanRequest->isAssigned())
+                            <button disabled
+                                class="text-gray-400 mr-2 cursor-not-allowed" title="Cannot edit assigned loan request">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button disabled
+                                class="text-gray-400 mr-2 cursor-not-allowed" title="Cannot delete assigned loan request">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        @else
+                            <button wire:click="openModal({{ $loanRequest->id }})"
+                                class="text-blue-600 hover:text-blue-900 mr-2">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button wire:click="confirmDelete({{ $loanRequest->id }})" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        @endif
                         <button wire:click="getEmiDetails({{ $loanRequest->id }})"
                             class="text-purple-600 hover:text-purple-900 mr-2">
                             <i class="fas fa-chart-line"></i>
-                        </button>
-                        <button wire:click="confirmDelete({{ $loanRequest->id }})" class="text-red-600 hover:text-red-900">
-                            <i class="fas fa-trash"></i>
                         </button>
                     </td>
                 </tr>

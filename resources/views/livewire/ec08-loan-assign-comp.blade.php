@@ -490,9 +490,9 @@
                     @if(!empty($emiSchedule))
                     <div class="md:col-span-2 mt-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-3">EMI Schedule</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full border border-gray-200 rounded-lg">
-                                <thead class="bg-gray-50">
+                        <div class="overflow-x-auto max-h-96 overflow-y-auto border border-gray-200 rounded-lg">
+                            <table class="min-w-full">
+                                <thead class="bg-gray-50 sticky top-0">
                                     <tr>
                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Installment #</th>
                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
